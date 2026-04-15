@@ -22,7 +22,6 @@ const editorSlice = createSlice({
       state.cursorPosition = action.payload
     },
 
-    // Insère du texte à la position courante du curseur et avance la position
     insertAtCursor(state, action: PayloadAction<string>) {
       const { content, cursorPosition } = state
       const text = action.payload

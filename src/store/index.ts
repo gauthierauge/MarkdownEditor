@@ -10,7 +10,6 @@ const persistConfig = {
   storage,
 }
 
-// Combine les deux slices puis applique redux-persist sur l'ensemble
 const rootReducer = combineReducers({
   blocks: blocksReducer,
   editor: editorReducer,
@@ -22,7 +21,6 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      // redux-persist dispatche des actions non-sérialisables (FLUSH, REHYDRATE, etc.)
       serializableCheck: {
         ignoredActions: [
           'persist/FLUSH',

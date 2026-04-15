@@ -47,7 +47,6 @@ const blocksSlice = createSlice({
       if (block) block.shortcut = action.payload.shortcut
     },
 
-    // Merge des blocs importés : regénère l'ID si un conflit existe déjà dans le state
     importBlocks(state, action: PayloadAction<Block[]>) {
       const existingIds = new Set(state.blocks.map((b) => b.id))
       for (const block of action.payload) {
