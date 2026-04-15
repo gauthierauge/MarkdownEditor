@@ -23,8 +23,8 @@ const blocksSlice = createSlice({
       reducer(state, action: PayloadAction<Block>) {
         state.blocks.push(action.payload)
       },
-      prepare(name: string, content = '', shortcut: string | null = null) {
-        return { payload: { id: nanoid(), name, content, shortcut } }
+      prepare(payload: { name: string; content: string }) {
+        return { payload: { id: nanoid(), name: payload.name, content: payload.content, shortcut: null } }
       },
     },
 
@@ -43,8 +43,13 @@ const blocksSlice = createSlice({
     },
 
     setShortcut(state, action: PayloadAction<{ id: string; shortcut: string | null }>) {
-      const block = state.blocks.find((b) => b.id === action.payload.id)
-      if (block) block.shortcut = action.payload.shortcut
+      const { id, shortcut } = action.payload
+      if (shortcut) {
+        const conflict = state.blocks.find((b) => b.shortcut === shortcut && b.id !== id)
+        if (conflict) conflict.shortcut = null
+      }
+      const block = state.blocks.find((b) => b.id === id)
+      if (block) block.shortcut = shortcut
     },
 
     importBlocks(state, action: PayloadAction<Block[]>) {

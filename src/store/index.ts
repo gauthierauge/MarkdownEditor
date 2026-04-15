@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // localStorage
+import storage from 'redux-persist/lib/storage'
 
 import blocksReducer from './blocksSlice.ts'
 import editorReducer from './editorSlice.ts'
@@ -8,6 +8,7 @@ import editorReducer from './editorSlice.ts'
 const persistConfig = {
   key: 'root',
   storage,
+  whitelist: ['blocks'],
 }
 
 const rootReducer = combineReducers({
