@@ -1,24 +1,66 @@
+import { useEffect } from 'react'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { BlockLibrary } from '@/features/block-library'
+import { ImageLibrary } from '@/features/image-library'
 import { MainEditor } from '@/features/main-editor'
-import { ImportExport } from '@/features/import-export'
-import { ShortcutManager } from '@/features/shortcuts'
+import { AppLayout } from '@/shared/components'
+import { useAppDispatch } from '@/shared/hooks'
+import { setImages, setImagesError, setImagesStatus } from '@/store/imagesSlice'
+import { getAllImagesFromDb } from '@/utils/imagesDb'
 
-export default function App() {
-  return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Markdown Editor</h1>
-        <ImportExport />
-      </header>
-      <main className="app-main">
-        <aside className="app-sidebar">
-          <BlockLibrary />
-        </aside>
-        <section className="app-content">
-          <MainEditor />
-        </section>
-      </main>
-      <ShortcutManager />
-    </div>
-  )
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <Navigate replace to="/files/welcome" /> },
+      { path: 'files/:id', element: <MainEditor /> },
+      { path: 'blocks', element: <BlockLibrary /> },
+      { path: 'images', element: <ImageLibrary /> },
+      { path: '*', element: <Navigate replace to="/files/welcome" /> },
+    ],
+  },
+])
+
+function App() {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function hydrateImages() {
+      dispatch(setImagesStatus('loading'))
+
+      try {
+        const images = await getAllImagesFromDb()
+
+        if (!isMounted) {
+          return
+        }
+
+        dispatch(setImages(images))
+      } catch (error) {
+        if (!isMounted) {
+          return
+        }
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Impossible de charger la bibliothèque d’images.'
+
+        dispatch(setImagesError(message))
+      }
+    }
+
+    void hydrateImages()
+
+    return () => {
+      isMounted = false
+    }
+  }, [dispatch])
+
+  return <RouterProvider router={router} />
 }
+
+export default App
