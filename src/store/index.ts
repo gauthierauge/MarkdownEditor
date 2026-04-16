@@ -1,13 +1,24 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // localStorage
 
 import blocksReducer from './blocksSlice.ts'
 import editorReducer from './editorSlice.ts'
 
+const customStorage = {
+  getItem: (key: string) => {
+    return Promise.resolve(localStorage.getItem(key))
+  },
+  setItem: (key: string, value: string) => {
+    return Promise.resolve(localStorage.setItem(key, value))
+  },
+  removeItem: (key: string) => {
+    return Promise.resolve(localStorage.removeItem(key))
+  },
+}
+
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: customStorage,
 }
 
 const rootReducer = combineReducers({
