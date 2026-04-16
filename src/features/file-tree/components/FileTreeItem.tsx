@@ -1,6 +1,6 @@
-import React, { type KeyboardEvent, useState, useRef } from 'react'
-import type { FileTreeItemProps } from '../types/FileTree.types'
-import { Input } from '@/components/ui/input'
+import React, { type KeyboardEvent, useState, useRef } from 'react';
+import type { FileTreeItemProps } from '@/features/file-tree/types/FileTree.types';
+import { Input } from '@/shared/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,9 +11,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { useDragContext } from '../hooks/useDragContext'
-import { useFolderDrop } from '../hooks/useFolderDrop'
+} from '@/shared/components/ui/alert-dialog';
+import { useDragContext } from '@/features/file-tree/hooks/useDragContext';
+import { useFolderDrop } from '@/features/file-tree/hooks/useFolderDrop';
 
 export function FileTreeItem({
   node,
@@ -24,74 +24,74 @@ export function FileTreeItem({
   onFolderClick,
   crud,
 }: FileTreeItemProps) {
-  const isFolder = node.type === 'folder'
-  const hasChildren = isFolder && node.children && node.children.length > 0
-  const expanded = isExpanded(node.id)
+  const isFolder = node.type === 'folder';
+  const hasChildren = isFolder && node.children && node.children.length > 0;
+  const expanded = isExpanded(node.id);
 
-  const [renaming, setRenaming] = useState(false)
-  const [renameValue, setRenameValue] = useState(node.name)
-  const [creatingChild, setCreatingChild] = useState(false)
-  const [newFolderName, setNewFolderName] = useState('')
+  const [renaming, setRenaming] = useState<boolean>(false);
+  const [renameValue, setRenameValue] = useState<string>(node.name);
+  const [creatingChild, setCreatingChild] = useState<boolean>(false);
+  const [newFolderName, setNewFolderName] = useState<string>('');
 
-  const { setDragged, clearDragged } = useDragContext()
+  const { setDragged, clearDragged } = useDragContext();
   const { getRootProps, isDragActive } = useFolderDrop({
     folderId: node.id,
     onMove: crud.onMove,
-  })
+  });
 
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
     if (isFolder) {
-      onToggle(node.id)
-      onFolderClick?.(node)
+      onToggle(node.id);
+      onFolderClick?.(node);
     } else {
-      onFileClick?.(node)
+      onFileClick?.(node);
     }
-  }
+  };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleClick()
+      e.preventDefault();
+      handleClick();
     }
-  }
+  };
 
   const startRename = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setRenameValue(node.name)
-    setRenaming(true)
-    setTimeout(() => inputRef.current?.select(), 0)
-  }
+    e.stopPropagation();
+    setRenameValue(node.name);
+    setRenaming(true);
+    setTimeout(() => inputRef.current?.select(), 0);
+  };
 
   const commitRename = () => {
-    crud.onRename(node.id, renameValue || node.name)
-    setRenaming(false)
-  }
+    crud.onRename(node.id, renameValue || node.name);
+    setRenaming(false);
+  };
 
   const handleRenameKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') commitRename()
-    if (e.key === 'Escape') setRenaming(false)
-  }
+    if (e.key === 'Enter') commitRename();
+    if (e.key === 'Escape') setRenaming(false);
+  };
 
   const startCreateChild = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (!expanded) onToggle(node.id)
-    setNewFolderName('')
-    setCreatingChild(true)
-  }
+    e.stopPropagation();
+    if (!expanded) onToggle(node.id);
+    setNewFolderName('');
+    setCreatingChild(true);
+  };
 
   const commitCreate = () => {
-    if (newFolderName.trim()) crud.onCreate(node.id, newFolderName.trim())
-    setCreatingChild(false)
-  }
+    if (newFolderName.trim()) crud.onCreate(node.id, newFolderName.trim());
+    setCreatingChild(false);
+  };
 
   const handleCreateKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') commitCreate()
-    if (e.key === 'Escape') setCreatingChild(false)
-  }
+    if (e.key === 'Enter') commitCreate();
+    if (e.key === 'Escape') setCreatingChild(false);
+  };
 
-  const folderDropProps = isFolder ? getRootProps() : {}
+  const folderDropProps = isFolder ? getRootProps() : {};
 
   return (
     <div className="file-tree-item" {...folderDropProps}>
@@ -220,5 +220,5 @@ export function FileTreeItem({
         </div>
       )}
     </div>
-  )
+  );
 }

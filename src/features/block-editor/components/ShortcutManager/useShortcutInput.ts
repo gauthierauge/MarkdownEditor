@@ -5,7 +5,7 @@ import { formatShortcut } from '@/features/block-editor/services/shortcuts.ts';
 
 export function useShortcutInput(onChange: (shortcut: string | null) => void) {
   const dispatch = useAppDispatch();
-  const [isCapturing, setIsCapturing] = useState(false);
+  const [isCapturing, setIsCapturing] = useState<boolean>(false);
 
   const beginCapture = () => {
     setIsCapturing(true);

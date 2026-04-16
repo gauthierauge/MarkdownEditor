@@ -1,8 +1,8 @@
-import { useAppDispatch } from '@/store/hooks'
-import { createFolder, deleteFolder, renameFolder, moveFolder } from '@/store/foldersSlice'
+import { useAppDispatch } from '@/shared/store/hooks';
+import { createFolder, deleteFolder, renameFolder, moveFolder } from '@/shared/store/foldersSlice';
 
 export function useFolderCrud() {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
     return {
         onCreate: (parentId: string | null, name: string) =>
@@ -11,5 +11,5 @@ export function useFolderCrud() {
         onRename: (id: string, name: string) => dispatch(renameFolder({ id, name })),
         onMove: (nodeId: string, targetFolderId: string | null) =>
             dispatch(moveFolder({ nodeId, targetFolderId })),
-    }
+    };
 }

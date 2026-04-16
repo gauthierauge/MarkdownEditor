@@ -7,7 +7,7 @@ import type { Block } from '@/features/block-editor/types/block.types.ts';
 export function useImportExport() {
   const dispatch = useAppDispatch();
   const blocks = useAppSelector((s) => s.blocks.blocks);
-  const [selectedExportId, setSelectedExportId] = useState('');
+  const [selectedExportId, setSelectedExportId] = useState<string>('');
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const selectedBlock = blocks.find((b) => b.id === selectedExportId);

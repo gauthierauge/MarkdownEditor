@@ -1,32 +1,32 @@
-import { useState } from 'react'
-import type { FileTreeProps } from './types/FileTree.types'
-import { FileTreeItem } from './components/FileTreeItem'
-import { useFileTree } from './hooks/useFileTree'
-import { useFolderCrud } from './hooks/useFolderCrud'
-import { DragProvider } from './context/DragContext'
-import { Input } from '@/components/ui/input'
-import './styles/FileTree.css'
+import { useState } from 'react';
+import type { FileTreeProps } from './types/FileTree.types';
+import { FileTreeItem } from './components/FileTreeItem';
+import { useFileTree } from './hooks/useFileTree';
+import { useFolderCrud } from './hooks/useFolderCrud';
+import { DragProvider } from './context/DragContext';
+import { Input } from '@/shared/components/ui/input';
+import './styles/FileTree.css';
 
 export function FileTree({
   data,
   onFileClick,
   onFolderClick,
 }: FileTreeProps) {
-  const { isExpanded, toggleExpand } = useFileTree()
-  const crud = useFolderCrud()
-  const [creatingRoot, setCreatingRoot] = useState(false)
-  const [rootName, setRootName] = useState('')
+  const { isExpanded, toggleExpand } = useFileTree();
+  const crud = useFolderCrud();
+  const [creatingRoot, setCreatingRoot] = useState<boolean>(false);
+  const [rootName, setRootName] = useState<string>('');
 
   const commitRoot = () => {
-    if (rootName.trim()) crud.onCreate(null, rootName.trim())
-    setCreatingRoot(false)
-    setRootName('')
-  }
+    if (rootName.trim()) crud.onCreate(null, rootName.trim());
+    setCreatingRoot(false);
+    setRootName('');
+  };
 
   const handleRootKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') commitRoot()
-    if (e.key === 'Escape') setCreatingRoot(false)
-  }
+    if (e.key === 'Enter') commitRoot();
+    if (e.key === 'Escape') setCreatingRoot(false);
+  };
 
   return (
     <DragProvider>
@@ -35,7 +35,7 @@ export function FileTree({
           <span className="text-xs text-muted-foreground uppercase tracking-wide">Explorateur</span>
           <button
             className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
-            onClick={() => { setRootName(''); setCreatingRoot(true) }}
+            onClick={() => { setRootName(''); setCreatingRoot(true); }}
             title="Nouveau dossier racine"
           >
             + Dossier
@@ -76,5 +76,5 @@ export function FileTree({
         )}
       </div>
     </DragProvider>
-  )
+  );
 }

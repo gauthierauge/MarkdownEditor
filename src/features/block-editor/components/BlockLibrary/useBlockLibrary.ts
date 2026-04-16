@@ -3,7 +3,7 @@ import { useAppSelector } from '@/shared/store/hooks.ts';
 
 export function useBlockLibrary() {
   const blocks = useAppSelector((s) => s.blocks.blocks);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const filtered = blocks.filter((b) =>
     b.name.toLowerCase().includes(searchQuery.toLowerCase()),

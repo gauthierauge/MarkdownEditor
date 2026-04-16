@@ -8,8 +8,8 @@ export function useBlockForm(blockId?: string, onSaved?: () => void) {
     blockId ? s.blocks.blocks.find((b) => b.id === blockId) : undefined,
   );
 
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
+  const [name, setName] = useState<string>('');
+  const [content, setContent] = useState<string>('');
 
   useEffect(() => {
     if (block) {

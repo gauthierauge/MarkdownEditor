@@ -1,12 +1,12 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { FileNode } from '@/features/file-tree/types/FileTree.types'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { FileNode } from '@/features/file-tree/types/FileTree.types';
 import {
     createFolderNode,
     moveNode,
     removeNode,
     renameNode,
     insertIntoFolder,
-} from './folderTree.utils'
+} from './folderTree.utils';
 
 const initialTree: FileNode[] = [
     {
@@ -47,38 +47,38 @@ const initialTree: FileNode[] = [
     },
     { id: '13', name: 'package.json', type: 'file' },
     { id: '14', name: 'README.md', type: 'file' },
-]
+];
 
 interface FoldersState {
-    tree: FileNode[]
+    tree: FileNode[];
 }
 
 const initialState: FoldersState = {
     tree: initialTree,
-}
+};
 
 const foldersSlice = createSlice({
     name: 'folders',
     initialState,
     reducers: {
         createFolder(state, action: PayloadAction<{ parentId: string | null; name: string }>) {
-            const { parentId, name } = action.payload
-            const node = createFolderNode(name)
-            state.tree = insertIntoFolder(state.tree, parentId, node)
+            const { parentId, name } = action.payload;
+            const node = createFolderNode(name);
+            state.tree = insertIntoFolder(state.tree, parentId, node);
         },
         deleteFolder(state, action: PayloadAction<string>) {
-            state.tree = removeNode(state.tree, action.payload)
+            state.tree = removeNode(state.tree, action.payload);
         },
         renameFolder(state, action: PayloadAction<{ id: string; name: string }>) {
-            const { id, name } = action.payload
-            if (name.trim()) state.tree = renameNode(state.tree, id, name.trim())
+            const { id, name } = action.payload;
+            if (name.trim()) state.tree = renameNode(state.tree, id, name.trim());
         },
         moveFolder(state, action: PayloadAction<{ nodeId: string; targetFolderId: string | null }>) {
-            const { nodeId, targetFolderId } = action.payload
-            state.tree = moveNode(state.tree, nodeId, targetFolderId)
+            const { nodeId, targetFolderId } = action.payload;
+            state.tree = moveNode(state.tree, nodeId, targetFolderId);
         },
     },
-})
+});
 
-export const { createFolder, deleteFolder, renameFolder, moveFolder } = foldersSlice.actions
-export default foldersSlice.reducer
+export const { createFolder, deleteFolder, renameFolder, moveFolder } = foldersSlice.actions;
+export default foldersSlice.reducer;
