@@ -1,16 +1,16 @@
 type Props = {
-  value: string;
-  onChange: (v: string) => void;
-};
+  value: string
+  onChange: (value: string) => void
+}
 
 export default function SearchBar({ value, onChange }: Props) {
   return (
     <input
       type="search"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(event) => onChange(event.target.value)}
       placeholder="Rechercher un bloc..."
-      className="w-full bg-[#1a1a2e] text-gray-200 px-3 py-2 rounded border border-[#2e303a] outline-none focus:border-purple-400 text-sm"
+      className="w-full rounded-[12px] border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-2 text-sm text-[var(--color-text)] outline-none focus:border-[var(--color-primary)]"
     />
-  );
+  )
 }

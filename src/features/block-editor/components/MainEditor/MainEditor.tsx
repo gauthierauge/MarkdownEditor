@@ -6,7 +6,7 @@ export default function MainEditor() {
   return (
     <textarea
       ref={textareaRef}
-      className="w-full min-h-[400px] flex-1 bg-[#1a1a2e] text-gray-200 font-mono text-[15px] leading-relaxed p-5 border border-[#2e303a] rounded-md resize-y outline-none focus:border-purple-400"
+      className="w-full min-h-[420px] flex-1 resize-y rounded-[20px] border border-[rgba(215,221,228,0.9)] bg-[var(--color-surface)] p-5 font-mono text-[15px] leading-relaxed text-[var(--color-text)] shadow-[var(--color-shadow)] outline-none focus:border-[var(--color-primary)]"
       value={content}
       {...handlers}
       placeholder="Start typing markdown..."

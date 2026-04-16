@@ -13,19 +13,26 @@ export default function BlockEditor() {
   useShortcutListener();
 
   return (
-    <div className="flex flex-col flex-1">
-      <header className="flex items-center justify-between px-4 py-3 border-b border-[#2e303a]">
-        <h1 className="text-lg font-semibold text-gray-200 m-0">Markdown Editor</h1>
+    <div className="page">
+      <header className="flex flex-wrap items-center justify-between gap-3 rounded-[20px] border border-[rgba(215,221,228,0.9)] bg-white/90 px-5 py-4 shadow-[var(--color-shadow)]">
+        <div>
+          <p className="m-0 text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            Blocs personnalises
+          </p>
+          <h1 className="m-0 text-2xl font-semibold text-[var(--color-text)]">
+            Markdown Editor
+          </h1>
+        </div>
         <ImportExport />
       </header>
-      <main className="flex flex-1 gap-4 p-4 min-h-0">
-        <aside className="w-64 shrink-0">
+      <main className="grid min-h-0 gap-4 xl:grid-cols-[260px_minmax(0,1fr)_380px]">
+        <aside className="min-w-0">
           <BlockLibrary />
         </aside>
         <section className="flex-1 flex">
           <MainEditor />
         </section>
-        <aside className="w-96 shrink-0">
+        <aside className="min-w-0">
           <BlockForm
             blockId={selectedBlockId ?? undefined}
             onSaved={() => dispatch(clearSelection())}
