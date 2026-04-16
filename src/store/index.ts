@@ -1,22 +1,29 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
 
-import blocksReducer from './blocksSlice.ts'
-import editorReducer from './editorSlice.ts'
+const storage = {
+  getItem: (key: string) => Promise.resolve(localStorage.getItem(key)),
+  setItem: (key: string, value: string) => Promise.resolve(localStorage.setItem(key, value)),
+  removeItem: (key: string) => Promise.resolve(localStorage.removeItem(key)),
+};
+
+import blocksReducer from './blocksSlice.ts';
+import editorReducer from './editorSlice.ts';
+import uiReducer from './uiSlice.ts';
 
 const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['blocks'],
-}
+};
 
 const rootReducer = combineReducers({
   blocks: blocksReducer,
   editor: editorReducer,
-})
+  ui: uiReducer,
+});
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -33,9 +40,9 @@ export const store = configureStore({
         ],
       },
     }),
-})
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
