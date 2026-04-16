@@ -5,8 +5,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { cn } from '@/lib/utils'
+} from '@/shared/components/ui/card'
+import { cn } from '@/shared/lib/utils'
 
 type PanelProps = PropsWithChildren<{
   actions?: ReactNode

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { addBlock, updateBlock, renameBlock, deleteBlock } from '@/store/blocksSlice.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { addBlock, updateBlock, renameBlock, deleteBlock } from '@/shared/store/blocksSlice.ts';
 
 export function useBlockForm(blockId?: string, onSaved?: () => void) {
   const dispatch = useAppDispatch();
@@ -8,8 +8,8 @@ export function useBlockForm(blockId?: string, onSaved?: () => void) {
     blockId ? s.blocks.blocks.find((b) => b.id === blockId) : undefined,
   );
 
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
+  const [name, setName] = useState<string>('');
+  const [content, setContent] = useState<string>('');
 
   useEffect(() => {
     if (block) {

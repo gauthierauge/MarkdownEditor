@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentFileId } from '@/store/editorSlice'
-import { selectImages } from '@/store/imagesSlice'
+import { useAppSelector } from '@/shared/store/hooks'
+import { selectCurrentFileId } from '@/shared/store/editorSlice'
+import { selectImages } from '@/shared/store/imagesSlice'
 
 function AppLayout() {
   const currentFileId = useAppSelector(selectCurrentFileId)

@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes } from 'react'
-import { Input as ShadcnInput } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { Input as ShadcnInput } from '@/shared/components/ui/input'
+import { cn } from '@/shared/lib/utils'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   hint?: string

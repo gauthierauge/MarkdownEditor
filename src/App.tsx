@@ -15,7 +15,7 @@ import {
   setImages,
   setImagesError,
   setImagesStatus,
-} from '@/store'
+} from '@/shared/store'
 import { getAllImagesFromDb } from '@/utils/imagesDb'
 
 function FileEditorPage() {
@@ -79,7 +79,7 @@ function App() {
           setImagesError(
             error instanceof Error
               ? error.message
-              : 'Impossible de charger la bibliotheque d’images.',
+              : "Impossible de charger la bibliotheque d'images.",
           ),
         )
       }

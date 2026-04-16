@@ -1,5 +1,5 @@
 import { useBlockListItem } from './useBlockListItem.ts'
-import type { Block } from '@/store/blocksSlice.ts'
+import type { Block } from '@/features/block-editor/types/block.types.ts';
 
 type Props = { block: Block }
 

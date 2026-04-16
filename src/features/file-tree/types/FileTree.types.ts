@@ -6,6 +6,14 @@ export interface FileNode {
   metadata?: Record<string, unknown>
 }
 
+export interface NodeCrudCallbacks {
+  onCreateFolder: (parentId: string | null, name: string) => void
+  onCreateFile: (parentId: string | null, name: string) => void
+  onDelete: (id: string) => void
+  onRename: (id: string, name: string) => void
+  onMove: (nodeId: string, targetFolderId: string | null) => void
+}
+
 export interface FileTreeProps {
   data: FileNode[]
   onFileClick?: (file: FileNode) => void
@@ -20,4 +28,5 @@ export interface FileTreeItemProps {
   onToggle: (nodeId: string) => void
   onFileClick?: (file: FileNode) => void
   onFolderClick?: (folder: FileNode) => void
+  crud: NodeCrudCallbacks
 }

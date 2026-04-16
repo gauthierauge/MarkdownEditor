@@ -8,6 +8,7 @@ import editorReducer, {
   setCursorPosition,
   setSelection,
 } from './editorSlice'
+import foldersReducer from './foldersSlice'
 import imagesReducer, {
   setImages,
   setImagesError,
@@ -30,12 +31,13 @@ const storage = {
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['images', 'ui'],
+  whitelist: ['blocks', 'editor', 'folders'],
 }
 
 const rootReducer = combineReducers({
   blocks: blocksReducer,
   editor: editorReducer,
+  folders: foldersReducer,
   images: imagesReducer,
   ui: uiReducer,
 })

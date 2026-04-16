@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
-import { insertAtCursor, selectCurrentFileId } from '@/store/editorSlice'
+import { insertAtCursor, selectCurrentFileId } from '@/shared/store/editorSlice'
 import {
   removeImage,
   renameImage,
@@ -9,7 +9,7 @@ import {
   selectImagesError,
   selectImagesStatus,
   upsertImages,
-} from '@/store/imagesSlice'
+} from '@/shared/store/imagesSlice'
 import { readFileAsDataUrl } from '@/utils/fileReaders'
 import { createStoredImageFromFile } from '@/utils/imageFormat'
 import { deleteImageFromDb, saveImageToDb, saveImagesToDb } from '@/utils/imagesDb'

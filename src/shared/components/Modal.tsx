@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/shared/components/ui/dialog'
 import Button from './Button'
 
 type ModalProps = PropsWithChildren<{
