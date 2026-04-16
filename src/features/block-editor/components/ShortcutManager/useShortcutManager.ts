@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { setShortcut } from '@/store/blocksSlice.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { setShortcut } from '@/shared/store/blocksSlice.ts';
 
 export function useShortcutManager() {
   const dispatch = useAppDispatch();

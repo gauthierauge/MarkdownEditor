@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { importBlocks } from '@/store/blocksSlice.ts';
-import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/utils/fileFormat.ts';
-import type { Block } from '@/features/block-editor/types/block.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { importBlocks } from '@/shared/store/blocksSlice.ts';
+import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/services/fileFormat.ts';
+import type { Block } from '@/features/block-editor/types/block.types.ts';
 
 export function useImportExport() {
   const dispatch = useAppDispatch();

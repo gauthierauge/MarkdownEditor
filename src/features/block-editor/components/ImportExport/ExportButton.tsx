@@ -1,4 +1,4 @@
-import { downloadFile } from '@/features/block-editor/utils/fileFormat.ts';
+import { downloadFile } from '@/features/block-editor/services/fileFormat.ts';
 
 type Props = {
   label: string;

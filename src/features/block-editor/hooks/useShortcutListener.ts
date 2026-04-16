@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { insertAtCursor } from '@/store/editorSlice.ts';
-import { matchShortcut } from '@/features/block-editor/utils/shortcuts.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { insertAtCursor } from '@/shared/store/editorSlice.ts';
+import { matchShortcut } from '@/features/block-editor/services/shortcuts.ts';
 
 export function useShortcutListener(): void {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import type { ParsedShortcut } from '@/features/block-editor/types/shortcut.ts';
+import type { ParsedShortcut } from '@/features/block-editor/types/shortcut.types.ts';
 
 const MODIFIER_KEYS = new Set(['Control', 'Shift', 'Alt', 'Meta']);
 

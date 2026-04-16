@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch } from '@/store/hooks.ts';
-import { startCapture, stopCapture } from '@/store/uiSlice.ts';
-import { formatShortcut } from '@/features/block-editor/utils/shortcuts.ts';
+import { useAppDispatch } from '@/shared/store/hooks.ts';
+import { startCapture, stopCapture } from '@/shared/store/uiSlice.ts';
+import { formatShortcut } from '@/features/block-editor/services/shortcuts.ts';
 
 export function useShortcutInput(onChange: (shortcut: string | null) => void) {
   const dispatch = useAppDispatch();

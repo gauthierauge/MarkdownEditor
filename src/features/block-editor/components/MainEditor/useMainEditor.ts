@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { setContent, setCursorPosition } from '@/store/editorSlice.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { setContent, setCursorPosition } from '@/shared/store/editorSlice.ts';
 import type React from 'react';
 
 export function useMainEditor() {

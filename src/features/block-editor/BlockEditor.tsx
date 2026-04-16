@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
-import { clearSelection } from '@/store/uiSlice.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
+import { clearSelection } from '@/shared/store/uiSlice.ts';
 import { useShortcutListener } from './hooks/useShortcutListener.ts';
 import MainEditor from './components/MainEditor/MainEditor.tsx';
 import BlockForm from './components/BlockForm/BlockForm.tsx';

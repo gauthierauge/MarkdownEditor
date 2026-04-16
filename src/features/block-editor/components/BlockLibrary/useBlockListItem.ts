@@ -1,7 +1,7 @@
-import { useAppDispatch } from '@/store/hooks.ts';
-import { insertAtCursor } from '@/store/editorSlice.ts';
-import { selectBlock } from '@/store/uiSlice.ts';
-import type { Block } from '@/features/block-editor/types/block.ts';
+import { useAppDispatch } from '@/shared/store/hooks.ts';
+import { insertAtCursor } from '@/shared/store/editorSlice.ts';
+import { selectBlock } from '@/shared/store/uiSlice.ts';
+import type { Block } from '@/features/block-editor/types/block.types.ts';
 
 export function useBlockListItem(block: Block) {
   const dispatch = useAppDispatch();
