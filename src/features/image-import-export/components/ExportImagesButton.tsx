@@ -1,6 +1,6 @@
 import { Button } from '@/shared/components'
 import { downloadTextFile, serializeImages, serializeSingleImage } from '@/utils/imageFormat'
-import type { StoredImage } from '@/features/image-library/types'
+import type { StoredImage } from '@/features/image-library/types/ImageLibrary.types'
 
 type ExportImagesButtonProps = {
   fileName: string

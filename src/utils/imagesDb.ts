@@ -1,5 +1,5 @@
 import { openDB, type DBSchema } from 'idb'
-import type { StoredImage } from '@/features/image-library/types'
+import type { StoredImage } from '@/features/image-library/types/ImageLibrary.types'
 
 const DB_NAME = 'markdown-editor'
 const STORE_NAME = 'images'

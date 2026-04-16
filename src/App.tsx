@@ -1,12 +1,43 @@
 import { useEffect } from 'react'
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { BlockLibrary } from '@/features/block-library'
-import { ImageLibrary } from '@/features/image-library'
-import { MainEditor } from '@/features/main-editor'
-import { AppLayout } from '@/shared/components'
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+  useParams,
+} from 'react-router-dom'
+import BlockEditor from '@/features/block-editor/BlockEditor'
+import MainEditor from '@/features/block-editor/components/MainEditor/MainEditor'
+import ImageLibrary from '@/features/image-library/ImageLibrary'
+import { AppLayout, Panel } from '@/shared/components'
 import { useAppDispatch } from '@/shared/hooks'
-import { setImages, setImagesError, setImagesStatus } from '@/store/imagesSlice'
+import {
+  openFile,
+  setImages,
+  setImagesError,
+  setImagesStatus,
+} from '@/store'
 import { getAllImagesFromDb } from '@/utils/imagesDb'
+
+function FileEditorPage() {
+  const { id } = useParams()
+  const dispatch = useAppDispatch()
+  const fileId = id ?? 'welcome'
+
+  useEffect(() => {
+    dispatch(openFile(fileId))
+  }, [dispatch, fileId])
+
+  return (
+    <div className="page">
+      <Panel
+        description={`Edition du fichier ${fileId}. Le contenu insere depuis le bloc images apparait ici.`}
+        title={`Fichier ${fileId}`}
+      >
+        <MainEditor />
+      </Panel>
+    </div>
+  )
+}
 
 const router = createBrowserRouter([
   {
@@ -14,8 +45,8 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <Navigate replace to="/files/welcome" /> },
-      { path: 'files/:id', element: <MainEditor /> },
-      { path: 'blocks', element: <BlockLibrary /> },
+      { path: 'files/:id', element: <FileEditorPage /> },
+      { path: 'blocks', element: <BlockEditor /> },
       { path: 'images', element: <ImageLibrary /> },
       { path: '*', element: <Navigate replace to="/files/welcome" /> },
     ],
@@ -44,12 +75,13 @@ function App() {
           return
         }
 
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Impossible de charger la bibliothèque d’images.'
-
-        dispatch(setImagesError(message))
+        dispatch(
+          setImagesError(
+            error instanceof Error
+              ? error.message
+              : 'Impossible de charger la bibliotheque d’images.',
+          ),
+        )
       }
     }
 

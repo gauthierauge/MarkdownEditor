@@ -1,4 +1,4 @@
-import type { StoredImage } from '@/features/image-library/types'
+import type { StoredImage } from '@/features/image-library/types/ImageLibrary.types'
 
 type SingleImageExportFile = {
   image: StoredImage

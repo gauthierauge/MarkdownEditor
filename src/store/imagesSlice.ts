@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { StoredImage } from '@/features/image-library/types'
+import type { StoredImage } from '@/features/image-library/types/ImageLibrary.types'
 import type { RootState } from './index'
 
 type ImagesStatus = 'idle' | 'loading' | 'ready' | 'error'

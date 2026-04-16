@@ -1,10 +1,11 @@
-import { ImageImportExport } from '@/features/image-import-export'
+import ImageImportExport from '@/features/image-import-export/ImageImportExport'
 import { Button, EmptyState, Input, PageHeader, Panel } from '@/shared/components'
 import ImageCard from './components/ImageCard'
 import ImageDropZone from './components/ImageDropZone'
 import ImagePreviewModal from './components/ImagePreviewModal'
 import RenameImageModal from './components/RenameImageModal'
 import useImageLibrary from './hooks/useImageLibrary'
+import './styles/ImageLibrary.css'
 
 function ImageLibrary() {
   const {
@@ -31,7 +32,7 @@ function ImageLibrary() {
   } = useImageLibrary()
 
   return (
-    <div className="page">
+    <div className="page image-library">
       <PageHeader
         actions={
           <ImageImportExport

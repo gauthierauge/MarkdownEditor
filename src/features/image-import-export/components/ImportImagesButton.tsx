@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { StoredImage } from '@/features/image-library/types'
+import type { StoredImage } from '@/features/image-library/types/ImageLibrary.types'
 import { Button } from '@/shared/components'
 import { readFileAsText } from '@/utils/fileReaders'
 import { parseImportedImages } from '@/utils/imageFormat'

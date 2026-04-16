@@ -1,4 +1,4 @@
-import { ExportImagesButton } from '@/features/image-import-export'
+import ExportImagesButton from '@/features/image-import-export/components/ExportImagesButton'
 import { Button } from '@/shared/components'
 import type { StoredImage } from '../types'
 

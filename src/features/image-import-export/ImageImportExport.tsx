@@ -1,25 +1,30 @@
-import type { StoredImage } from '@/features/image-library/types'
 import ExportImagesButton from './components/ExportImagesButton'
 import ImportImagesButton from './components/ImportImagesButton'
-
-type ImageImportExportProps = {
-  images: StoredImage[]
-  onError: (message: string) => void
-  onImport: (images: StoredImage[]) => Promise<void> | void
-}
+import useImageImportExport from './hooks/useImageImportExport'
+import type { ImageImportExportProps } from './types'
+import './styles/ImageImportExport.css'
 
 function ImageImportExport({
   images,
   onError,
   onImport,
 }: ImageImportExportProps) {
+  const imageImportExport = useImageImportExport({
+    images,
+    onError,
+    onImport,
+  })
+
   return (
-    <div className="button-group">
-      <ImportImagesButton onError={onError} onImport={onImport} />
+    <div className="button-group image-import-export">
+      <ImportImagesButton
+        onError={imageImportExport.onError}
+        onImport={imageImportExport.onImport}
+      />
       <ExportImagesButton
         fileName="bibliotheque.imgs.mdlc"
-        images={images}
-        label="Exporter la bibliothèque"
+        images={imageImportExport.images}
+        label="Exporter la bibliotheque"
       />
     </div>
   )

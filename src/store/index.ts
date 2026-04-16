@@ -1,37 +1,43 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
 import blocksReducer from './blocksSlice'
-import editorReducer from './editorSlice'
-import imagesReducer from './imagesSlice'
+import editorReducer, {
+  insertAtCursor,
+  openFile,
+  setContent,
+  setCursorPosition,
+  setSelection,
+} from './editorSlice'
+import imagesReducer, {
+  setImages,
+  setImagesError,
+  setImagesStatus,
+} from './imagesSlice'
+import uiReducer from './uiSlice'
 
-type PersistStorage = {
-  getItem: (key: string) => Promise<string | null>
-  removeItem: (key: string) => Promise<void>
-  setItem: (key: string, value: string) => Promise<void>
-}
-
-const storage: PersistStorage = {
-  async getItem(key) {
-    return window.localStorage.getItem(key)
-  },
-  async removeItem(key) {
-    window.localStorage.removeItem(key)
-  },
-  async setItem(key, value) {
+const storage = {
+  getItem: (key: string) => Promise.resolve(window.localStorage.getItem(key)),
+  setItem: (key: string, value: string) => {
     window.localStorage.setItem(key, value)
+    return Promise.resolve()
+  },
+  removeItem: (key: string) => {
+    window.localStorage.removeItem(key)
+    return Promise.resolve()
   },
 }
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['images'],
+  blacklist: ['images', 'ui'],
 }
 
 const rootReducer = combineReducers({
   blocks: blocksReducer,
   editor: editorReducer,
   images: imagesReducer,
+  ui: uiReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -57,3 +63,14 @@ export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+
+export {
+  insertAtCursor,
+  openFile,
+  setContent,
+  setCursorPosition,
+  setImages,
+  setImagesError,
+  setImagesStatus,
+  setSelection,
+}
