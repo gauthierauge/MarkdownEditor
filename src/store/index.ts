@@ -4,6 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import blocksReducer from './blocksSlice.ts';
 import editorReducer from './editorSlice.ts';
 import uiReducer from './uiSlice.ts';
+import foldersReducer from './foldersSlice.ts';
 
 const customStorage = {
   getItem: (key: string) => {
@@ -20,13 +21,14 @@ const customStorage = {
 const persistConfig = {
   key: 'root',
   storage: customStorage,
-  whitelist: ['blocks'],
+  whitelist: ['blocks', 'folders'],
 };
 
 const rootReducer = combineReducers({
   blocks: blocksReducer,
   editor: editorReducer,
   ui: uiReducer,
+  folders: foldersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
