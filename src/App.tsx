@@ -1,9 +1,9 @@
-import { BlockLibrary } from '@/features/block-library'
-import { MainEditor } from '@/features/main-editor'
-import { ImportExport } from '@/features/import-export'
-import { ShortcutManager } from '@/features/shortcuts'
 import type { FileNode } from './features/file-tree/types/FileTree.types'
 import { FileTree } from './features/file-tree/FileTree'
+import ImportExport from './features/block-editor/components/ImportExport/ImportExport'
+import BlockLibrary from './features/block-editor/components/BlockLibrary/BlockLibrary'
+import MainEditor from './features/block-editor/components/MainEditor/MainEditor'
+import ShortcutManager from './features/block-editor/components/ShortcutManager/ShortcutManager'
 
 const sampleFiles: FileNode[] = [
   {

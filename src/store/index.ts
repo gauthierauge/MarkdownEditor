@@ -1,12 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 
-const storage = {
-  getItem: (key: string) => Promise.resolve(localStorage.getItem(key)),
-  setItem: (key: string, value: string) => Promise.resolve(localStorage.setItem(key, value)),
-  removeItem: (key: string) => Promise.resolve(localStorage.removeItem(key)),
-};
-
 import blocksReducer from './blocksSlice.ts';
 import editorReducer from './editorSlice.ts';
 import uiReducer from './uiSlice.ts';
