@@ -1,21 +1,5 @@
-import type { Block } from '@/store/blocksSlice.ts';
-
-type PartFile = {
-  version: string;
-  type: 'part';
-  block: Block;
-};
-
-type PartsFile = {
-  version: string;
-  type: 'parts';
-  blocks: Block[];
-};
-
-type ParsedFile = {
-  type: 'part' | 'parts';
-  blocks: Block[];
-};
+import type { Block } from '@/features/block-editor/types/block.ts';
+import type { PartFile, PartsFile, ParsedFile } from '@/features/block-editor/types/fileFormat.ts';
 
 function normalizeBlock(raw: Record<string, unknown>): Block {
   if (typeof raw.name !== 'string' || !raw.name) throw new Error('Bloc invalide : "name" requis');

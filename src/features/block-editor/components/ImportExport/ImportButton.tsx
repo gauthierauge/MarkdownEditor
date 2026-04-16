@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { deserializeFile } from '@/features/block-editor/utils/fileFormat.ts';
-import type { Block } from '@/store/blocksSlice.ts';
+import type { Block } from '@/features/block-editor/types/block.ts';
 
 type Props = {
   onImport: (blocks: Block[]) => void;

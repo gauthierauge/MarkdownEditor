@@ -1,11 +1,5 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
-
-export interface Block {
-  id: string;
-  name: string;
-  content: string;
-  shortcut: string | null;
-}
+import type { Block } from '@/features/block-editor/types/block.ts';
 
 interface BlocksState {
   blocks: Block[];

@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { importBlocks } from '@/store/blocksSlice.ts';
 import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/utils/fileFormat.ts';
-import type { Block } from '@/store/blocksSlice.ts';
+import type { Block } from '@/features/block-editor/types/block.ts';
 
 export function useImportExport() {
   const dispatch = useAppDispatch();
