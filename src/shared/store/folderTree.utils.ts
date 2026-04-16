@@ -67,3 +67,7 @@ export function isAncestor(tree: FileNode[], ancestorId: string, nodeId: string)
 export function createFolderNode(name: string): FileNode {
     return { id: nanoid(), name, type: 'folder', children: [] };
 }
+
+export function createFileNode(name: string): FileNode {
+    return { id: nanoid(), name, type: 'file' };
+}

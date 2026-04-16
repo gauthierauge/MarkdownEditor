@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { FileTreeProps } from './types/FileTree.types';
 import { FileTreeItem } from './components/FileTreeItem';
 import { useFileTree } from './hooks/useFileTree';
-import { useFolderCrud } from './hooks/useFolderCrud';
+import { useNodeCrud } from './hooks/useNodeCrud';
 import { DragProvider } from './context/DragContext';
 import { Input } from '@/shared/components/ui/input';
-import './styles/FileTree.css';
 
 export function FileTree({
   data,
@@ -13,40 +12,52 @@ export function FileTree({
   onFolderClick,
 }: FileTreeProps) {
   const { isExpanded, toggleExpand } = useFileTree();
-  const crud = useFolderCrud();
-  const [creatingRoot, setCreatingRoot] = useState<boolean>(false);
+  const crud = useNodeCrud();
+  const [creatingRoot, setCreatingRoot] = useState<'folder' | 'file' | null>(null);
   const [rootName, setRootName] = useState<string>('');
 
   const commitRoot = () => {
-    if (rootName.trim()) crud.onCreate(null, rootName.trim());
-    setCreatingRoot(false);
+    if (rootName.trim()) {
+      if (creatingRoot === 'folder') crud.onCreateFolder(null, rootName.trim());
+      else crud.onCreateFile(null, rootName.trim());
+    }
+    setCreatingRoot(null);
     setRootName('');
   };
 
   const handleRootKey = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') commitRoot();
-    if (e.key === 'Escape') setCreatingRoot(false);
+    if (e.key === 'Escape') setCreatingRoot(null);
   };
 
   return (
     <DragProvider>
-      <div className="file-tree" role="tree">
+      <div className="w-full py-2 text-sm select-none text-left" role="tree">
         <div className="flex items-center justify-between px-2 pb-1">
           <span className="text-xs text-muted-foreground uppercase tracking-wide">Explorateur</span>
-          <button
-            className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
-            onClick={() => { setRootName(''); setCreatingRoot(true); }}
-            title="Nouveau dossier racine"
-          >
-            + Dossier
-          </button>
+          <span className="flex gap-1">
+            <button
+              className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
+              onClick={() => { setRootName(''); setCreatingRoot('folder'); }}
+              title="Nouveau dossier racine"
+            >
+              📁+
+            </button>
+            <button
+              className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
+              onClick={() => { setRootName(''); setCreatingRoot('file'); }}
+              title="Nouveau fichier racine"
+            >
+              📄+
+            </button>
+          </span>
         </div>
 
         {creatingRoot && (
           <div className="px-2 pb-1">
             <Input
               className="h-6 py-0 px-1 text-sm"
-              placeholder="Nom du dossier…"
+              placeholder={creatingRoot === 'folder' ? 'Nom du dossier…' : 'Nom du fichier…'}
               value={rootName}
               onChange={(e) => setRootName(e.target.value)}
               onBlur={commitRoot}
@@ -57,8 +68,8 @@ export function FileTree({
         )}
 
         {data.length === 0 && !creatingRoot ? (
-          <div className="file-tree--empty">
-            <p className="file-tree__empty-message">Aucun fichier disponible</p>
+          <div className="flex items-center justify-center min-h-[100px]">
+            <p className="text-sm text-foreground opacity-60">Aucun fichier disponible</p>
           </div>
         ) : (
           data.map((node) => (
