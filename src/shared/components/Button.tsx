@@ -1,4 +1,6 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import { Button as ShadcnButton } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 type ButtonProps = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -15,19 +17,19 @@ function Button({
   variant = 'primary',
   ...props
 }: ButtonProps) {
-  const classes = [
-    'ui-button',
-    `ui-button--${variant}`,
-    fullWidth ? 'ui-button--full-width' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ')
+  const shadcnVariant =
+    variant === 'primary'
+      ? 'default'
+      : variant === 'danger'
+        ? 'destructive'
+        : variant
+
+  const classes = cn(fullWidth ? 'w-full' : '', className)
 
   return (
-    <button className={classes} type={type} {...props}>
+    <ShadcnButton className={classes} type={type} variant={shadcnVariant} {...props}>
       {children}
-    </button>
+    </ShadcnButton>
   )
 }
 

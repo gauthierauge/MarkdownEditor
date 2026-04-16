@@ -1,4 +1,12 @@
 import type { PropsWithChildren, ReactNode } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 type PanelProps = PropsWithChildren<{
   actions?: ReactNode
@@ -9,18 +17,20 @@ type PanelProps = PropsWithChildren<{
 
 function Panel({ actions, children, className = '', description, title }: PanelProps) {
   return (
-    <section className={['ui-panel', className].filter(Boolean).join(' ')}>
-      <header className="ui-panel__header">
+    <Card className={cn('ui-panel', className)}>
+      <CardHeader className="ui-panel__header">
         <div>
-          <h2 className="ui-panel__title">{title}</h2>
+          <CardTitle className="ui-panel__title">{title}</CardTitle>
           {description ? (
-            <p className="ui-panel__description">{description}</p>
+            <CardDescription className="ui-panel__description">
+              {description}
+            </CardDescription>
           ) : null}
         </div>
         {actions ? <div className="ui-panel__actions">{actions}</div> : null}
-      </header>
-      <div className="ui-panel__body">{children}</div>
-    </section>
+      </CardHeader>
+      <CardContent className="ui-panel__body">{children}</CardContent>
+    </Card>
   )
 }
 

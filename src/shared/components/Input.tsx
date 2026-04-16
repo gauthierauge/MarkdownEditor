@@ -1,4 +1,6 @@
 import type { InputHTMLAttributes } from 'react'
+import { Input as ShadcnInput } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   hint?: string
@@ -7,11 +9,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 
 function Input({ className = '', hint, id, label, ...props }: InputProps) {
   const input = (
-    <input
-      className={['ui-input', className].filter(Boolean).join(' ')}
-      id={id}
-      {...props}
-    />
+    <ShadcnInput className={cn(className)} id={id} {...props} />
   )
 
   if (!label) {
