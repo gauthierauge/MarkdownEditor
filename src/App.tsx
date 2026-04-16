@@ -1,74 +1,45 @@
-import type { FileNode } from './features/file-tree/types/FileTree.types'
-import { FileTree } from './features/file-tree/FileTree'
-import ImportExport from './features/block-editor/components/ImportExport/ImportExport'
-import BlockLibrary from './features/block-editor/components/BlockLibrary/BlockLibrary'
-import MainEditor from './features/block-editor/components/MainEditor/MainEditor'
-import ShortcutManager from './features/block-editor/components/ShortcutManager/ShortcutManager'
-
-const sampleFiles: FileNode[] = [
-  {
-    id: '1',
-    name: 'src',
-    type: 'folder',
-    children: [
-      {
-        id: '2',
-        name: 'components',
-        type: 'folder',
-        children: [
-          { id: '3', name: 'Header.tsx', type: 'file' },
-          { id: '4', name: 'Footer.tsx', type: 'file' },
-        ],
-      },
-      {
-        id: '5',
-        name: 'utils',
-        type: 'folder',
-        children: [
-          { id: '6', name: 'helpers.ts', type: 'file' },
-          { id: '7', name: 'constants.ts', type: 'file' },
-        ],
-      },
-      { id: '8', name: 'App.tsx', type: 'file' },
-      { id: '9', name: 'main.tsx', type: 'file' },
-    ],
-  },
-  {
-    id: '10',
-    name: 'public',
-    type: 'folder',
-    children: [
-      { id: '11', name: 'favicon.ico', type: 'file' },
-      { id: '12', name: 'logo.png', type: 'file' },
-    ],
-  },
-  { id: '13', name: 'package.json', type: 'file' },
-  { id: '14', name: 'README.md', type: 'file' },
-]
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
+import { clearSelection } from '@/shared/store/uiSlice';
+import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
+import ImportExport from '@/features/block-editor/components/ImportExport/ImportExport';
+import MainEditor from '@/features/block-editor/components/MainEditor/MainEditor';
+import BlockForm from '@/features/block-editor/components/BlockForm/BlockForm';
+import ShortcutManager from '@/features/block-editor/components/ShortcutManager/ShortcutManager';
+import AppSidebar from '@/shared/components/AppSidebar';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
 
 export default function App() {
+  const dispatch = useAppDispatch();
+  const selectedBlockId = useAppSelector((s) => s.ui.selectedBlockId);
+  useShortcutListener();
+
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Markdown Editor</h1>
-        <ImportExport />
-      </header>
-      <main className="app-main">
-        <aside className="app-sidebar">
-          <BlockLibrary />
-          <hr style={{ margin: '20px 0', borderColor: 'var(--border)' }} />
-          <h2 style={{ fontSize: '16px', margin: '10px 0' }}>File Explorer</h2>
-          <FileTree
-            data={sampleFiles}
-            onFileClick={(file) => console.log('File clicked:', file.name)}
-            onFolderClick={(folder) => console.log('Folder clicked:', folder.name)}
-          />
-        </aside>
-        <section className="app-content">
-          <MainEditor />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex items-center gap-2 px-4 py-3 border-b border-sidebar-border">
+          <SidebarTrigger />
+          <div className="ml-auto">
+            <ImportExport />
+          </div>
+        </header>
+
+        <section className="flex flex-1 gap-4 p-4 min-h-0">
+          <div className="flex-1 flex">
+            <MainEditor />
+          </div>
+          <aside className="w-96 shrink-0">
+            <BlockForm
+              blockId={selectedBlockId ?? undefined}
+              onSaved={() => dispatch(clearSelection())}
+            />
+          </aside>
         </section>
-      </main>
-      <ShortcutManager />
-    </div>
-  )
+
+        <footer className="px-4 pb-4">
+          <ShortcutManager />
+        </footer>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
