@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/markdownSlice';
 import { downloadFile } from '@/shared/lib/downloadFile';
+import { ensureMdExtension } from '@/features/markdown-editor/services/markdown.service';
 
 export function useMarkdownExport() {
     const openFileId = useAppSelector(selectOpenFileId);
@@ -11,8 +12,7 @@ export function useMarkdownExport() {
     );
 
     const handleExport = useCallback(() => {
-        const name = fileName.endsWith('.md') ? fileName : `${fileName}.md`;
-        downloadFile(name, content, 'text/markdown');
+        downloadFile(ensureMdExtension(fileName), content, 'text/markdown');
     }, [content, fileName]);
 
     return { handleExport };

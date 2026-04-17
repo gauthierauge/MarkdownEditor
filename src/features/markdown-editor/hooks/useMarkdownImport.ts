@@ -3,6 +3,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch } from '@/shared/store/hooks';
 import { saveFileContent, openFile } from '@/shared/store/markdownSlice';
 import { importFileNode } from '@/shared/store/foldersSlice';
+import { readFileAsText } from '@/features/markdown-editor/services/markdown.service';
 
 export function useMarkdownImport() {
     const dispatch = useAppDispatch();
@@ -13,19 +14,15 @@ export function useMarkdownImport() {
     }, []);
 
     const handleFileChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
+        async (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0];
             if (!file) return;
             const id = nanoid();
             const name = file.name;
-            const reader = new FileReader();
-            reader.onload = () => {
-                const text = reader.result as string;
-                dispatch(importFileNode({ parentId: null, name, id }));
-                dispatch(saveFileContent({ id, content: text }));
-                dispatch(openFile({ id, name }));
-            };
-            reader.readAsText(file);
+            const text = await readFileAsText(file);
+            dispatch(importFileNode({ parentId: null, name, id }));
+            dispatch(saveFileContent({ id, content: text }));
+            dispatch(openFile({ id, name }));
             e.target.value = '';
         },
         [dispatch]

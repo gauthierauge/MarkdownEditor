@@ -1,8 +1,7 @@
 import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
-import { openFile, selectOpenFileId } from '@/shared/store/markdownSlice';
+import { openFile } from '@/shared/store/markdownSlice';
 import { selectFileTree } from '@/shared/store/foldersSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
-import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
 import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImport';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -12,7 +11,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarSeparator,
 } from '@/shared/components/ui/sidebar';
 
 export default function AppSidebar() {
@@ -29,15 +27,6 @@ export default function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Blocs</SidebarGroupLabel>
-          <SidebarGroupContent className="px-2">
-            <BlockLibrary />
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarSeparator />
-
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center justify-between pr-1">
             Explorateur

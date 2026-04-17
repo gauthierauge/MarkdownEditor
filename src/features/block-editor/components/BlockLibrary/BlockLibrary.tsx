@@ -4,7 +4,6 @@ import SearchBar from './SearchBar';
 import BlockListItem from './BlockListItem';
 import BlockFormDialog from '../BlockForm/BlockFormDialog';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 export default function BlockLibrary() {
   const { blocks, filtered, searchQuery, setSearchQuery } = useBlockLibrary();
@@ -23,30 +22,25 @@ export default function BlockLibrary() {
 
   return (
     <>
-      <Card className="h-full">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest text-muted-foreground">
-            Bibliothèque de blocs
-          </CardTitle>
-          <Button variant="ghost" size="xs" onClick={openCreate}>
-            + Nouveau
-          </Button>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 flex-1 min-h-0 overflow-hidden">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="flex-1">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <div className="flex-1 overflow-y-auto">
-            {filtered.length === 0 ? (
-              <p className="text-sm text-muted-foreground italic text-center py-4">
-                {blocks.length === 0 ? 'Aucun bloc' : 'Aucun résultat'}
-              </p>
-            ) : (
-              filtered.map((b) => (
-                <BlockListItem key={b.id} block={b} onEdit={openEdit} />
-              ))
-            )}
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+        <Button variant="outline" size="xs" onClick={openCreate}>
+          + Nouveau
+        </Button>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground italic text-center py-4">
+            {blocks.length === 0 ? 'Aucun bloc' : 'Aucun résultat'}
+          </p>
+        ) : (
+          filtered.map((b) => (
+            <BlockListItem key={b.id} block={b} onEdit={openEdit} />
+          ))
+        )}
+      </div>
 
       <BlockFormDialog
         open={dialogOpen}

@@ -37,7 +37,6 @@ export function useBlockForm(blockId?: string, onSaved?: () => void) {
 
   const handleDelete = () => {
     if (!block) return;
-    if (!window.confirm('Supprimer ce bloc ?')) return;
     dispatch(deleteBlock(block.id));
     onSaved?.();
   };

@@ -1,28 +1,26 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import { saveFileContent, closeFile, selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/markdownSlice';
-import { selectAllBlocks } from '@/shared/store/blocksSlice';
 import { useEditorInsert } from '@/shared/context/EditorInsertContext';
-import type { Block } from '@/features/block-editor/types/block.types';
-
-const AUTOSAVE_DELAY_MS = 600;
+import { insertTextAt } from '@/features/markdown-editor/services/markdown.service';
+import type { EditorDraft } from '@/features/markdown-editor/types/editor.types';
+import {AUTOSAVE_DELAY_MS} from "@/features/markdown-editor/constants/editor.constants.ts";
 
 export function useMarkdownEditor() {
     const dispatch = useAppDispatch();
-    const { registerInsert, insertText } = useEditorInsert();
+    const { registerInsert } = useEditorInsert();
     const openFileId = useAppSelector(selectOpenFileId);
     const openFileName = useAppSelector(selectOpenFileName);
     const savedContent = useAppSelector((state) =>
         openFileId != null ? selectFileContent(state, openFileId) : ''
     );
-    const blocks = useAppSelector(selectAllBlocks);
 
-    const [draft, setDraft] = useState<{ fileId: string | null; content: string }>({ fileId: openFileId, content: savedContent });
+    const [draft, setDraft] = useState<EditorDraft>({ fileId: openFileId, content: savedContent });
     const [showPreview, setShowPreview] = useState<boolean>(true);
-    const [showBlockMenu, setShowBlockMenu] = useState<boolean>(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
+
+    const latestRef = useRef({ content: draft.content, handleChange: (_v: string) => {} });
 
     if (draft.fileId !== openFileId) {
         setDraft({ fileId: openFileId, content: savedContent });
@@ -42,24 +40,26 @@ export function useMarkdownEditor() {
         [dispatch, openFileId]
     );
 
-    const contentRef = useRef(content);
-    contentRef.current = content;
+    useEffect(() => {
+        latestRef.current = { content, handleChange };
+    });
 
-    const handleChangeRef = useRef(handleChange);
-    handleChangeRef.current = handleChange;
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, []);
 
     const insertIntoTextarea = useCallback((text: string) => {
         const ta = textareaRef.current;
-        const pos = ta ? ta.selectionStart : contentRef.current.length;
-        const before = contentRef.current.slice(0, pos);
-        const after = contentRef.current.slice(pos);
-        const newContent = before + text + after;
-        handleChangeRef.current(newContent);
+        const { content: current, handleChange: onChange } = latestRef.current;
+        const pos = ta ? ta.selectionStart : current.length;
+        const result = insertTextAt(current, pos, text);
+        onChange(result.content);
 
         if (ta) {
-            const newPos = pos + text.length;
             requestAnimationFrame(() => {
-                ta.setSelectionRange(newPos, newPos);
+                ta.setSelectionRange(result.cursorPosition, result.cursorPosition);
                 ta.focus();
             });
         }
@@ -70,24 +70,7 @@ export function useMarkdownEditor() {
         return () => registerInsert(null);
     }, [registerInsert, insertIntoTextarea]);
 
-    useEffect(() => {
-        if (!showBlockMenu) return;
-        const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-                setShowBlockMenu(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [showBlockMenu]);
-
     const togglePreview = useCallback(() => setShowPreview((v) => !v), []);
-    const toggleBlockMenu = useCallback(() => setShowBlockMenu((v) => !v), []);
-
-    const handleInsertBlock = useCallback((block: Block) => {
-        insertText(block.content);
-        setShowBlockMenu(false);
-    }, [insertText]);
 
     const handleClose = useCallback(() => {
         if (openFileId != null) {
@@ -98,17 +81,12 @@ export function useMarkdownEditor() {
 
     return {
         textareaRef,
-        menuRef,
         openFileId,
         openFileName,
         content,
-        blocks,
         showPreview,
-        showBlockMenu,
         handleChange,
         handleClose,
         togglePreview,
-        toggleBlockMenu,
-        handleInsertBlock,
     };
 }

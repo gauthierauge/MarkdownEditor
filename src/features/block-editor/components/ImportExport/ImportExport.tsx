@@ -21,20 +21,23 @@ export default function ImportExport() {
   } = useImportExport();
 
   return (
-    <div className="flex items-center gap-3">
-      <ExportButton
-        label="Exporter tout"
-        getFilename={getAllFilename}
-        getContent={getAllContent}
-        disabled={blocks.length === 0}
-      />
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-2">
+        <ExportButton
+          label="Exporter tout"
+          getFilename={getAllFilename}
+          getContent={getAllContent}
+          disabled={blocks.length === 0}
+        />
+        <ImportButton onImport={handleImport} onError={handleError} />
+      </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex gap-2">
         <Select
           value={selectedExportId || undefined}
           onValueChange={(v) => setSelectedExportId(v ?? '')}
         >
-          <SelectTrigger size="sm">
+          <SelectTrigger size="sm" className="flex-1">
             <SelectValue placeholder="Choisir un bloc" />
           </SelectTrigger>
           <SelectContent>
@@ -50,8 +53,6 @@ export default function ImportExport() {
           disabled={!selectedBlock}
         />
       </div>
-
-      <ImportButton onImport={handleImport} onError={handleError} />
 
       {feedback && (
         <span className="text-xs text-emerald-400 animate-pulse">{feedback}</span>

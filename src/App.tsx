@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectOpenFileId } from '@/shared/store/markdownSlice';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
-import ImportExport from '@/features/block-editor/components/ImportExport/ImportExport';
-import ShortcutManager from '@/features/block-editor/components/ShortcutManager/ShortcutManager';
 import MarkdownEditor from '@/features/markdown-editor/MarkdownEditor';
 import AppSidebar from '@/shared/components/AppSidebar';
+import BlocksSidebar from '@/shared/components/BlocksSidebar';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
+import { Button } from '@/shared/components/ui/button';
+import { PanelRightIcon } from 'lucide-react';
 
 export default function App() {
   const openFileId = useAppSelector(selectOpenFileId);
   useShortcutListener();
+  const [rightOpen, setRightOpen] = useState<boolean>(true);
 
   return (
     <SidebarProvider>
@@ -18,7 +21,14 @@ export default function App() {
         <header className="flex items-center gap-2 px-4 py-3 border-b border-sidebar-border">
           <SidebarTrigger />
           <div className="ml-auto">
-            <ImportExport />
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setRightOpen((o) => !o)}
+            >
+              <PanelRightIcon />
+              <span className="sr-only">Toggle Blocs</span>
+            </Button>
           </div>
         </header>
 
@@ -36,11 +46,14 @@ export default function App() {
             </div>
           </div>
         )}
-
-        <footer className="px-4 pb-4">
-          <ShortcutManager />
-        </footer>
       </SidebarInset>
+      <SidebarProvider
+        open={rightOpen}
+        onOpenChange={setRightOpen}
+        className="w-auto! min-h-0!"
+      >
+        <BlocksSidebar />
+      </SidebarProvider>
     </SidebarProvider>
   );
 }
