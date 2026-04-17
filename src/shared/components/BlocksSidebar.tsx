@@ -1,6 +1,7 @@
 import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
 import ShortcutManager from '@/features/block-editor/components/ShortcutManager/ShortcutManager';
 import ImportExport from '@/features/block-editor/components/ImportExport/ImportExport';
+import ImageLibrary from '@/features/image-library/ImageLibrary';
 import {
   Sidebar,
   SidebarContent,
@@ -41,6 +42,15 @@ export default function BlocksSidebar() {
           <SidebarGroupLabel>Import / Export</SidebarGroupLabel>
           <SidebarGroupContent className="px-2">
             <ImportExport />
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarSeparator />
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Images</SidebarGroupLabel>
+          <SidebarGroupContent className="px-2">
+            <ImageLibrary />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

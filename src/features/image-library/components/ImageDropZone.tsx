@@ -1,5 +1,6 @@
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/shared/components/ui/button';
+import { Upload } from 'lucide-react';
 
 type ImageDropZoneProps = {
   onFilesSelected: (files: File[]) => void | Promise<void>;
@@ -24,20 +25,19 @@ export function ImageDropZone({ onFilesSelected }: ImageDropZoneProps) {
   return (
     <div
       {...getRootProps({
-        className: `image-dropzone ${isDragActive ? 'is-drag-active' : ''}`,
+        className: `flex flex-col items-center justify-center gap-1.5 min-h-[4.5rem] rounded-lg border border-dashed p-3 transition-all ${
+          isDragActive
+            ? 'border-primary bg-primary/[0.07] shadow-[0_0_0_3px] shadow-primary/10'
+            : 'border-border bg-muted/30'
+        }`,
       })}
     >
       <input {...getInputProps()} />
-
-      <div className="space-y-2">
-        <p className="text-base font-semibold text-foreground">Dépose tes images ici</p>
-        <p className="text-sm text-muted-foreground">
-          PNG, JPG, WebP, SVG. Le drag and drop passe par <code>react-dropzone</code>.
-        </p>
-      </div>
-
-      <Button onClick={open} type="button">
-        Parcourir
+      <span className="text-xs text-muted-foreground">
+        {isDragActive ? 'Dépose ici…' : 'Glisser ou'}
+      </span>
+      <Button onClick={open} type="button" size="xs" variant="outline">
+        <Upload className="h-3 w-3" /> Parcourir
       </Button>
     </div>
   );
