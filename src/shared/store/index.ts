@@ -5,6 +5,7 @@ import blocksReducer from './blocksSlice.ts';
 import editorReducer from './editorSlice.ts';
 import uiReducer from './uiSlice.ts';
 import foldersReducer from './foldersSlice.ts';
+import markdownReducer from './markdownSlice.ts';
 
 const customStorage = {
   getItem: (key: string) => {
@@ -16,12 +17,12 @@ const customStorage = {
   removeItem: (key: string) => {
     return Promise.resolve(localStorage.removeItem(key))
   },
-}
+};
 
 const persistConfig = {
   key: 'root',
   storage: customStorage,
-  whitelist: ['blocks', 'folders'],
+  whitelist: ['blocks', 'folders', 'markdown'],
 };
 
 const rootReducer = combineReducers({
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   editor: editorReducer,
   ui: uiReducer,
   folders: foldersReducer,
+  markdown: markdownReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,4 +1,5 @@
-import { useAppSelector } from '@/shared/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
+import { openFile } from '@/shared/store/markdownSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
 import {
@@ -12,6 +13,7 @@ import {
 } from '@/shared/components/ui/sidebar';
 
 export default function AppSidebar() {
+  const dispatch = useAppDispatch();
   const tree = useAppSelector((s) => s.folders.tree);
 
   return (
@@ -37,8 +39,7 @@ export default function AppSidebar() {
           <SidebarGroupContent className="px-2">
             <FileTree
               data={tree}
-              onFileClick={(file) => console.log('File clicked:', file.name)}
-              onFolderClick={(folder) => console.log('Folder clicked:', folder.name)}
+              onFileClick={(file) => dispatch(openFile({ id: file.id, name: file.name }))}
             />
           </SidebarGroupContent>
         </SidebarGroup>
