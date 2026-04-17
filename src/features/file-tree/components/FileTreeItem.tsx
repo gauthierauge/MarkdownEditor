@@ -2,7 +2,7 @@ import React, { type KeyboardEvent, useState } from 'react';
 import type { FileTreeItemProps } from '@/features/file-tree/types/FileTree.types';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
-import { useDragContext } from '@/features/file-tree/context/useDragContext';
+import { useDragContext } from '@/shared/context/drag/useDragContext';
 import { useFolderDrop } from '@/features/file-tree/hooks/useFolderDrop';
 import { useInlineEdit } from '@/features/file-tree/hooks/useInlineEdit';
 import { DeleteConfirmButton } from './DeleteConfirmButton';

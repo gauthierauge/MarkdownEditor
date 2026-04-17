@@ -3,7 +3,7 @@ import type { FileTreeProps } from './types/FileTree.types';
 import { FileTreeItem } from './components/FileTreeItem';
 import { useFileTree } from './hooks/useFileTree';
 import { useNodeCrud } from './hooks/useNodeCrud';
-import { DragProvider } from './context/DragContext';
+import { DragProvider } from '@/shared/context/drag/DragProvider';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 

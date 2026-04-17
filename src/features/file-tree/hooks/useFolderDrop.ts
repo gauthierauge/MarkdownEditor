@@ -1,5 +1,5 @@
 import { useDropzone } from 'react-dropzone';
-import { useDragContext } from '@/features/file-tree/context/useDragContext';
+import { useDragContext } from '@/shared/context/drag/useDragContext';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectFileTree } from '@/shared/store/slices/foldersSlice';
 import { isAncestor } from '@/shared/store/slices/folderTree.utils';

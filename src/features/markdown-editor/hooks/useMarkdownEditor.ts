@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import { saveFileContent, closeFile, selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/slices/markdownSlice';
-import { useEditorInsert } from '@/shared/context/useEditorInsert';
+import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
 import { insertTextAt } from '@/features/markdown-editor/services/markdown.service';
 import type { EditorDraft } from '@/features/markdown-editor/types/editor.types';
 import {AUTOSAVE_DELAY_MS} from "@/features/markdown-editor/constants/editor.constants.ts";

@@ -1,13 +1,7 @@
-import { createContext, useRef, useCallback, type ReactNode } from 'react';
+import { useRef, useCallback, type ReactNode } from 'react';
+import { EditorInsertContext } from './EditorInsertContext';
 
 type InsertFn = (text: string) => void;
-
-export interface EditorInsertContextValue {
-  insertText: InsertFn;
-  registerInsert: (fn: InsertFn | null) => void;
-}
-
-export const EditorInsertContext = createContext<EditorInsertContextValue | null>(null);
 
 export function EditorInsertProvider({ children }: { children: ReactNode }) {
   const fnRef = useRef<InsertFn | null>(null);
