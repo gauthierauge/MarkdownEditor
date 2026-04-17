@@ -1,4 +1,4 @@
-import { downloadFile } from '@/features/block-editor/services/fileFormat.ts';
+import { downloadFile } from '@/features/block-editor/services/fileFormat.service';
 import { Button } from '@/shared/components/ui/button';
 
 type Props = {

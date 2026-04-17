@@ -1,5 +1,12 @@
-import React, { useCallback, useRef } from 'react';
-import { DragContext } from './drag-context';
+import React, { createContext, useCallback, useRef } from 'react';
+
+export interface DragContextValue {
+    getDraggedId: () => string | null;
+    setDragged: (id: string) => void;
+    clearDragged: () => void;
+}
+
+export const DragContext = createContext<DragContextValue | null>(null);
 
 export function DragProvider({ children }: { children: React.ReactNode }) {
     const draggedNodeIdRef = useRef<string | null>(null);

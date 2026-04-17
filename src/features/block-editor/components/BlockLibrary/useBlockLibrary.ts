@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppSelector } from '@/shared/store/hooks.ts';
+import { useAppSelector } from '@/shared/store/hooks';
 
 export function useBlockLibrary() {
   const blocks = useAppSelector((s) => s.blocks.blocks);

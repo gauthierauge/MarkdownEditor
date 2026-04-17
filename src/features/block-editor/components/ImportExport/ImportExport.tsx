@@ -1,6 +1,6 @@
-import { useImportExport } from './useImportExport.ts';
-import ExportButton from './ExportButton.tsx';
-import ImportButton from './ImportButton.tsx';
+import { useImportExport } from './useImportExport';
+import ExportButton from './ExportButton';
+import ImportButton from './ImportButton';
 import {
   Select,
   SelectContent,

@@ -1,11 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 
-import blocksReducer from './blocksSlice.ts';
-import editorReducer from './editorSlice.ts';
-import uiReducer from './uiSlice.ts';
-import foldersReducer from './foldersSlice.ts';
-import markdownReducer from './markdownSlice.ts';
+import blocksReducer from './blocksSlice';
+import uiReducer from './uiSlice';
+import foldersReducer from './foldersSlice';
+import markdownReducer from './markdownSlice';
 
 const customStorage = {
   getItem: (key: string) => {
@@ -27,7 +26,6 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   blocks: blocksReducer,
-  editor: editorReducer,
   ui: uiReducer,
   folders: foldersReducer,
   markdown: markdownReducer,

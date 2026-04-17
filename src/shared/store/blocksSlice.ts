@@ -1,5 +1,5 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import type { Block } from '@/features/block-editor/types/block.types';
 
 interface BlocksState {
   blocks: Block[];

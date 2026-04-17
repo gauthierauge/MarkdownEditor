@@ -1,12 +1,12 @@
-import { useBlockListItem } from './useBlockListItem.ts';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { useBlockListItem } from './useBlockListItem';
+import type { Block } from '@/features/block-editor/types/block.types';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 
-type Props = { block: Block };
+type Props = { block: Block; onEdit: (blockId: string) => void };
 
-export default function BlockListItem({ block }: Props) {
-  const { handleInsert, handleEdit } = useBlockListItem(block);
+export default function BlockListItem({ block, onEdit }: Props) {
+  const { handleInsert, handleEdit } = useBlockListItem(block, onEdit);
 
   return (
     <div

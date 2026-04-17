@@ -3,6 +3,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import { saveFileContent, openFile } from '@/shared/store/markdownSlice';
 import { importFileNode } from '@/shared/store/foldersSlice';
+import { downloadFile } from '@/shared/lib/downloadFile';
 
 export function useMarkdownExport() {
     const openFileId = useAppSelector((s) => s.markdown.openFileId);
@@ -13,13 +14,7 @@ export function useMarkdownExport() {
 
     const handleExport = useCallback(() => {
         const name = fileName.endsWith('.md') ? fileName : `${fileName}.md`;
-        const blob = new Blob([content], { type: 'text/markdown' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name;
-        a.click();
-        URL.revokeObjectURL(url);
+        downloadFile(name, content, 'text/markdown');
     }, [content, fileName]);
 
     return { handleExport };

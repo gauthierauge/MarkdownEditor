@@ -1,5 +1,5 @@
-import { useShortcutManager } from './useShortcutManager.ts';
-import ShortcutInput from './ShortcutInput.tsx';
+import { useShortcutManager } from './useShortcutManager';
+import ShortcutInput from './ShortcutInput';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 export default function ShortcutManager() {

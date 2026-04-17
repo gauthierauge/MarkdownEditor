@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { deserializeFile } from '@/features/block-editor/services/fileFormat.ts';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { deserializeFile } from '@/features/block-editor/services/fileFormat.service';
+import type { Block } from '@/features/block-editor/types/block.types';
 import { Button } from '@/shared/components/ui/button';
 
 type Props = {

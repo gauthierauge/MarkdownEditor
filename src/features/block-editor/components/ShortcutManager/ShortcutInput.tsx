@@ -1,4 +1,4 @@
-import { useShortcutInput } from './useShortcutInput.ts';
+import { useShortcutInput } from './useShortcutInput';
 import { Button } from '@/shared/components/ui/button';
 
 type Props = {
