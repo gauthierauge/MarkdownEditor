@@ -1,6 +1,13 @@
 import { useImportExport } from './useImportExport.ts';
 import ExportButton from './ExportButton.tsx';
 import ImportButton from './ImportButton.tsx';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select';
 
 export default function ImportExport() {
   const {
@@ -23,16 +30,19 @@ export default function ImportExport() {
       />
 
       <div className="flex items-center gap-1">
-        <select
-          value={selectedExportId}
-          onChange={(e) => setSelectedExportId(e.target.value)}
-          className="bg-[#1a1a2e] text-gray-300 text-xs px-2 py-1.5 rounded border border-[#2e303a] outline-none cursor-pointer"
+        <Select
+          value={selectedExportId || undefined}
+          onValueChange={(v) => setSelectedExportId(v ?? '')}
         >
-          <option value="">Choisir un bloc</option>
-          {blocks.map((b) => (
-            <option key={b.id} value={b.id}>{b.name}</option>
-          ))}
-        </select>
+          <SelectTrigger size="sm">
+            <SelectValue placeholder="Choisir un bloc" />
+          </SelectTrigger>
+          <SelectContent>
+            {blocks.map((b) => (
+              <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <ExportButton
           label="Exporter"
           getFilename={getSingleFilename}

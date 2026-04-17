@@ -5,6 +5,7 @@ import { useFileTree } from './hooks/useFileTree';
 import { useNodeCrud } from './hooks/useNodeCrud';
 import { DragProvider } from './context/DragContext';
 import { Input } from '@/shared/components/ui/input';
+import { Button } from '@/shared/components/ui/button';
 
 export function FileTree({
   data,
@@ -36,20 +37,22 @@ export function FileTree({
         <div className="flex items-center justify-between px-2 pb-1">
           <span className="text-xs text-muted-foreground uppercase tracking-wide">Explorateur</span>
           <span className="flex gap-1">
-            <button
-              className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
+            <Button
+              variant="ghost"
+              size="icon-xs"
               onClick={() => { setRootName(''); setCreatingRoot('folder'); }}
               title="Nouveau dossier racine"
             >
               📁+
-            </button>
-            <button
-              className="text-xs px-1.5 py-0.5 rounded hover:bg-accent hover:text-accent-foreground"
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-xs"
               onClick={() => { setRootName(''); setCreatingRoot('file'); }}
               title="Nouveau fichier racine"
             >
               📄+
-            </button>
+            </Button>
           </span>
         </div>
 

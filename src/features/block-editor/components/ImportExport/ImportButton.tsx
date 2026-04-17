@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { deserializeFile } from '@/features/block-editor/services/fileFormat.ts';
 import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { Button } from '@/shared/components/ui/button';
 
 type Props = {
   onImport: (blocks: Block[]) => void;
@@ -31,12 +32,13 @@ export default function ImportButton({ onImport, onError }: Props) {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => inputRef.current?.click()}
-        className="px-3 py-1.5 text-xs rounded bg-[#1a1a2e] text-gray-300 border border-[#2e303a] hover:border-gray-500 transition-colors cursor-pointer"
+        variant="outline"
+        size="xs"
       >
         Importer
-      </button>
+      </Button>
       <input
         ref={inputRef}
         type="file"

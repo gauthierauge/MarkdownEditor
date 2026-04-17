@@ -1,6 +1,7 @@
 import React, { type KeyboardEvent, useState } from 'react';
 import type { FileTreeItemProps } from '@/features/file-tree/types/FileTree.types';
 import { Input } from '@/shared/components/ui/input';
+import { Button } from '@/shared/components/ui/button';
 import { useDragContext } from '@/features/file-tree/hooks/useDragContext';
 import { useFolderDrop } from '@/features/file-tree/hooks/useFolderDrop';
 import { useInlineEdit } from '@/features/file-tree/hooks/useInlineEdit';
@@ -119,32 +120,35 @@ export function FileTreeItem({
           <span className="ml-auto hidden group-hover:flex items-center gap-0.5 shrink-0">
             {isFolder && (
               <>
-                <button
-                  className="p-0.5 rounded hover:bg-accent hover:text-accent-foreground text-xs"
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
                   title="Nouveau sous-dossier"
                   onClick={(e) => startCreate(e, 'folder')}
                   tabIndex={-1}
                 >
                   📁+
-                </button>
-                <button
-                  className="p-0.5 rounded hover:bg-accent hover:text-accent-foreground text-xs"
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
                   title="Nouveau fichier"
                   onClick={(e) => startCreate(e, 'file')}
                   tabIndex={-1}
                 >
                   📄+
-                </button>
+                </Button>
               </>
             )}
-            <button
-              className="p-0.5 rounded hover:bg-accent hover:text-accent-foreground text-xs"
+            <Button
+              variant="ghost"
+              size="icon-xs"
               title="Renommer"
               onClick={startRename}
               tabIndex={-1}
             >
               ✏️
-            </button>
+            </Button>
             <DeleteConfirmButton label={node.name} onConfirm={() => crud.onDelete(node.id)} />
           </span>
         )}

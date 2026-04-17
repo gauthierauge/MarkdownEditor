@@ -1,4 +1,5 @@
 import { downloadFile } from '@/features/block-editor/services/fileFormat.ts';
+import { Button } from '@/shared/components/ui/button';
 
 type Props = {
   label: string;
@@ -13,12 +14,13 @@ export default function ExportButton({ label, getFilename, getContent, disabled 
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
       disabled={disabled}
-      className="px-3 py-1.5 text-xs rounded bg-[#1a1a2e] text-gray-300 border border-[#2e303a] hover:border-gray-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+      variant="outline"
+      size="xs"
     >
       {label}
-    </button>
+    </Button>
   );
 }

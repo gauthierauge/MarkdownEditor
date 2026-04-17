@@ -1,4 +1,5 @@
 import { useShortcutInput } from './useShortcutInput.ts';
+import { Button } from '@/shared/components/ui/button';
 
 type Props = {
   value: string | null;
@@ -10,25 +11,24 @@ export default function ShortcutInput({ value, onChange }: Props) {
 
   return (
     <div className="flex items-center gap-1">
-      <button
+      <Button
         onClick={beginCapture}
-        className={`px-3 py-1.5 text-xs font-mono rounded border transition-colors cursor-pointer ${
-          isCapturing
-            ? 'bg-emerald-900/30 border-emerald-500 text-emerald-400 animate-pulse'
-            : 'bg-[#1a1a2e] border-[#2e303a] text-gray-400 hover:border-gray-500'
-        }`}
+        variant="outline"
+        size="xs"
+        className={`font-mono ${isCapturing ? 'animate-pulse border-ring text-foreground' : ''}`}
       >
         {isCapturing
           ? 'Appuyez sur une combinaison...'
           : value ?? 'Aucun raccourci'}
-      </button>
+      </Button>
       {value && (
-        <button
+        <Button
           onClick={() => onChange(null)}
-          className="text-gray-600 hover:text-red-400 text-xs px-1 transition-colors cursor-pointer"
+          variant="ghost"
+          size="icon-xs"
         >
           ✕
-        </button>
+        </Button>
       )}
     </div>
   );

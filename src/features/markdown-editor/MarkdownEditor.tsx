@@ -3,6 +3,7 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { useMarkdownEditor } from './hooks/useMarkdownEditor';
 import { useMarkdownExport } from './hooks/useMarkdownImportExport';
+import { Button } from '@/shared/components/ui/button';
 
 export default function MarkdownEditor() {
     const { openFileName, content, handleChange, handleClose } = useMarkdownEditor();
@@ -21,27 +22,30 @@ export default function MarkdownEditor() {
                 <span className="text-sm font-medium text-foreground truncate flex-1">
                     {openFileName ?? 'Untitled'}
                 </span>
-                <button
+                <Button
+                    variant="outline"
+                    size="xs"
                     onClick={() => setShowPreview((v) => !v)}
-                    className="px-2.5 py-1 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                     title={showPreview ? 'Masquer l\'aperçu' : 'Afficher l\'aperçu'}
                 >
                     {showPreview ? 'Éditeur seul' : 'Aperçu'}
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="outline"
+                    size="xs"
                     onClick={handleExport}
-                    className="px-2.5 py-1 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                     title="Exporter en .md"
                 >
                     ↓ Exporter
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="outline"
+                    size="xs"
                     onClick={handleClose}
-                    className="px-2.5 py-1 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                     title="Fermer le fichier"
                 >
                     ✕ Fermer
-                </button>
+                </Button>
             </div>
 
             <div className="flex flex-1 min-h-0 gap-0">

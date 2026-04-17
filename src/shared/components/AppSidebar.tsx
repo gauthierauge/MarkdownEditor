@@ -3,6 +3,7 @@ import { openFile } from '@/shared/store/markdownSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
 import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImportExport';
+import { Button } from '@/shared/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -39,13 +40,14 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center justify-between pr-1">
             Explorateur
-            <button
+            <Button
               onClick={handleImportClick}
-              className="px-2 py-0.5 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+              variant="ghost"
+              size="xs"
               title="Importer un fichier .md"
             >
               ↑ Importer
-            </button>
+            </Button>
           </SidebarGroupLabel>
           <input
             ref={inputRef}
