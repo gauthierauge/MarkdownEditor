@@ -53,39 +53,39 @@ export function useImageLibrary() {
   const [query, setQuery] = useState('');
   const [previewedImage, setPreviewedImage] = useState<StoredImage | null>(null);
   const [renamedImage, setRenamedImage] = useState<StoredImage | null>(null);
+  const [isLoadingDelayed, setIsLoadingDelayed] = useState(false);
   const importInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (imagesStatus !== 'loading') {
+      return;
+    }
+
+    const timer = setTimeout(() => setIsLoadingDelayed(true), 300);
+    return () => {
+      clearTimeout(timer);
+      setIsLoadingDelayed(false);
+    };
+  }, [imagesStatus]);
 
   useEffect(() => {
     if (imagesStatus !== 'idle') {
       return;
     }
 
-    let isMounted = true;
     dispatch(setImagesStatus('loading'));
 
     getAllImagesFromDb()
       .then((storedImages) => {
-        if (!isMounted) {
-          return;
-        }
-
         dispatch(setImages(storedImages));
         dispatch(setImagesStatus('ready'));
       })
       .catch((error) => {
-        if (!isMounted) {
-          return;
-        }
-
         const message =
           error instanceof Error ? error.message : 'Impossible de charger la bibliothèque.';
         dispatch(setImagesError(message));
         dispatch(setImagesStatus('error'));
       });
-
-    return () => {
-      isMounted = false;
-    };
   }, [dispatch, imagesStatus]);
 
   const filteredImages = useMemo(() => {
@@ -222,6 +222,7 @@ export function useImageLibrary() {
     images,
     filteredImages,
     imagesStatus,
+    isLoadingDelayed,
     imagesError,
     openFileId,
     openFileName,
