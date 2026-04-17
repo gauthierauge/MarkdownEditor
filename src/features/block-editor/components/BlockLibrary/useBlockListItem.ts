@@ -2,6 +2,7 @@ import { useAppDispatch } from '@/shared/store/hooks.ts';
 import { insertAtCursor } from '@/shared/store/editorSlice.ts';
 import { selectBlock } from '@/shared/store/uiSlice.ts';
 import type { Block } from '@/features/block-editor/types/block.types.ts';
+import type React from 'react';
 
 export function useBlockListItem(block: Block) {
   const dispatch = useAppDispatch();
@@ -10,7 +11,7 @@ export function useBlockListItem(block: Block) {
     dispatch(insertAtCursor(block.content));
   };
 
-  const handleEdit = (e: React.MouseEvent) => {
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     dispatch(selectBlock(block.id));
   };

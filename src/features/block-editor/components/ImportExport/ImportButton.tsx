@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { deserializeFile } from '@/features/block-editor/services/fileFormat.ts';
 import type { Block } from '@/features/block-editor/types/block.types.ts';
 

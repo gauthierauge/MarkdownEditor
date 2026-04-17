@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
 import { addBlock, updateBlock, renameBlock, deleteBlock } from '@/shared/store/blocksSlice.ts';
 
@@ -8,15 +8,15 @@ export function useBlockForm(blockId?: string, onSaved?: () => void) {
     blockId ? s.blocks.blocks.find((b) => b.id === blockId) : undefined,
   );
 
-  const [name, setName] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+  const [trackedBlockId, setTrackedBlockId] = useState<string | undefined>(blockId);
+  const [name, setName] = useState<string>(block?.name ?? '');
+  const [content, setContent] = useState<string>(block?.content ?? '');
 
-  useEffect(() => {
-    if (block) {
-      setName(block.name);
-      setContent(block.content);
-    }
-  }, [block]);
+  if (trackedBlockId !== blockId) {
+    setTrackedBlockId(blockId);
+    setName(block?.name ?? '');
+    setContent(block?.content ?? '');
+  }
 
   const isEditing = !!blockId && !!block;
   const canSave = name.trim().length > 0;
