@@ -81,6 +81,10 @@ const foldersSlice = createSlice({
             const { parentId, name } = action.payload;
             state.tree = insertIntoFolder(state.tree, parentId, createFileNode(name));
         },
+        importFileNode(state, action: PayloadAction<{ parentId: string | null; name: string; id: string }>) {
+            const { parentId, name, id } = action.payload;
+            state.tree = insertIntoFolder(state.tree, parentId, { id, name, type: 'file' });
+        },
     },
 });
 
@@ -90,5 +94,6 @@ export const {
     moveNode,
     createFolder,
     createFile,
+    importFileNode,
 } = foldersSlice.actions;
 export default foldersSlice.reducer;

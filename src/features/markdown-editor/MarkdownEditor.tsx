@@ -2,9 +2,11 @@ import { useState, useMemo } from 'react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { useMarkdownEditor } from './hooks/useMarkdownEditor';
+import { useMarkdownExport } from './hooks/useMarkdownImportExport';
 
 export default function MarkdownEditor() {
     const { openFileName, content, handleChange, handleClose } = useMarkdownEditor();
+    const { handleExport } = useMarkdownExport();
     const [showPreview, setShowPreview] = useState(true);
 
     const html = useMemo(
@@ -25,6 +27,13 @@ export default function MarkdownEditor() {
                     title={showPreview ? 'Masquer l\'aperçu' : 'Afficher l\'aperçu'}
                 >
                     {showPreview ? 'Éditeur seul' : 'Aperçu'}
+                </button>
+                <button
+                    onClick={handleExport}
+                    className="px-2.5 py-1 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                    title="Exporter en .md"
+                >
+                    ↓ Exporter
                 </button>
                 <button
                     onClick={handleClose}

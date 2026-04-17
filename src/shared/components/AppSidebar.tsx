@@ -2,6 +2,7 @@ import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
 import { openFile } from '@/shared/store/markdownSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
+import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImportExport';
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +16,7 @@ import {
 export default function AppSidebar() {
   const dispatch = useAppDispatch();
   const tree = useAppSelector((s) => s.folders.tree);
+  const { handleImportClick, handleFileChange, inputRef } = useMarkdownImport();
 
   return (
     <Sidebar>
@@ -35,7 +37,23 @@ export default function AppSidebar() {
         <SidebarSeparator />
 
         <SidebarGroup>
-          <SidebarGroupLabel>Explorateur</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex items-center justify-between pr-1">
+            Explorateur
+            <button
+              onClick={handleImportClick}
+              className="px-2 py-0.5 text-xs rounded border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+              title="Importer un fichier .md"
+            >
+              ↑ Importer
+            </button>
+          </SidebarGroupLabel>
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".md,text/markdown"
+            className="hidden"
+            onChange={handleFileChange}
+          />
           <SidebarGroupContent className="px-2">
             <FileTree
               data={tree}
