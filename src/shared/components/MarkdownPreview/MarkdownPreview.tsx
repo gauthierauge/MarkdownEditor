@@ -1,22 +1,19 @@
-import { useMemo } from 'react';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
+import { useMarkdownHtml } from './useMarkdownHtml';
 
 type Props = {
   content: string;
   className?: string;
   emptyMessage?: string;
+  imageMap?: Record<string, string>;
 };
 
 export default function MarkdownPreview({
   content,
   className = 'prose prose-sm max-w-none',
   emptyMessage,
+  imageMap,
 }: Props) {
-  const html = useMemo(
-    () => DOMPurify.sanitize(marked.parse(content) as string),
-    [content],
-  );
+  const html = useMarkdownHtml(content, imageMap);
 
   if (!content.trim() && emptyMessage) {
     return (

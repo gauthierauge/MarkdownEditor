@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 import type { StoredImage } from '@/features/image-library/types/image.types';
 
@@ -70,3 +70,9 @@ export default imagesSlice.reducer;
 export const selectImages = (state: RootState) => state.images.items;
 export const selectImagesStatus = (state: RootState) => state.images.status;
 export const selectImagesError = (state: RootState) => state.images.errorMessage;
+
+export const selectImageDataUrlMap = createSelector(
+  selectImages,
+  (images): Record<string, string> =>
+    Object.fromEntries(images.map((img) => [img.id, img.dataUrl])),
+);

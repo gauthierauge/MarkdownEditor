@@ -1,4 +1,5 @@
 import { downloadFile } from '@/shared/lib/downloadFile';
+import { IMAGE_URI_PREFIX } from '../constants/image.constants';
 import type { StoredImage } from '../types/image.types';
 
 function readFileAsDataUrl(file: File): Promise<string> {
@@ -58,7 +59,7 @@ export async function createStoredImageFromFile(file: File): Promise<StoredImage
 }
 
 export function buildImageMarkdown(image: StoredImage): string {
-  return `![${image.name}](${image.dataUrl})`;
+  return `![${image.name}](${IMAGE_URI_PREFIX}${image.id})`;
 }
 
 export function parseImportedImages(raw: string): StoredImage[] {

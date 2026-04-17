@@ -2,11 +2,14 @@ import { useMarkdownEditor } from './hooks/useMarkdownEditor';
 import { useMarkdownExport } from './hooks/useMarkdownExport';
 import BlockInsertMenu from './components/BlockInsertMenu';
 import { Button } from '@/shared/components/ui/button';
-import MarkdownPreview from '@/shared/components/MarkdownPreview';
+import MarkdownPreview from '@/shared/components/MarkdownPreview/MarkdownPreview';
 import { toast } from 'sonner';
 import { Trash2, Upload, X } from 'lucide-react';
+import { useAppSelector } from '@/shared/store/hooks';
+import { selectImageDataUrlMap } from '@/shared/store/slices/imagesSlice';
 
 export default function MarkdownEditor() {
+  const imageMap = useAppSelector(selectImageDataUrlMap);
   const {
     textareaRef,
     openFileName,
@@ -66,6 +69,7 @@ export default function MarkdownEditor() {
           <div className="w-1/2 overflow-y-auto p-4">
             <MarkdownPreview
               content={content}
+              imageMap={imageMap}
               emptyMessage="L'aperçu apparaîtra ici…"
             />
           </div>

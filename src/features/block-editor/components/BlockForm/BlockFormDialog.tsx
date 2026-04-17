@@ -3,7 +3,9 @@ import DeleteBlockDialog from './DeleteBlockDialog';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Textarea } from '@/shared/components/ui/textarea';
-import MarkdownPreview from '@/shared/components/MarkdownPreview';
+import MarkdownPreview from '@/shared/components/MarkdownPreview/MarkdownPreview';
+import { useAppSelector } from '@/shared/store/hooks';
+import { selectImageDataUrlMap } from '@/shared/store/slices/imagesSlice';
 import {
   Dialog,
   DialogContent,
@@ -19,6 +21,7 @@ type Props = {
 };
 
 export default function BlockFormDialog({ open, onOpenChange, blockId }: Props) {
+  const imageMap = useAppSelector(selectImageDataUrlMap);
   const {
     name, setName,
     content, setContent,
@@ -68,6 +71,7 @@ export default function BlockFormDialog({ open, onOpenChange, blockId }: Props) 
             <div className="flex-1 rounded-lg border border-border overflow-auto p-4 bg-background">
               <MarkdownPreview
                 content={content}
+                imageMap={imageMap}
                 emptyMessage="Aperçu du bloc..."
               />
             </div>

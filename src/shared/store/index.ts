@@ -12,7 +12,12 @@ const customStorage = {
     return Promise.resolve(localStorage.getItem(key))
   },
   setItem: (key: string, value: string) => {
-    return Promise.resolve(localStorage.setItem(key, value))
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.error('localStorage quota exceeded:', e);
+    }
+    return Promise.resolve();
   },
   removeItem: (key: string) => {
     return Promise.resolve(localStorage.removeItem(key))
