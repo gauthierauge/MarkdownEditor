@@ -23,6 +23,7 @@ export interface FileTreeProps {
 
 export interface FileTreeItemProps {
   node: FileNode
+  parentId: string | null
   level: number
   isExpanded: (nodeId: string) => boolean
   onToggle: (nodeId: string) => void

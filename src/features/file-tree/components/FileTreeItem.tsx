@@ -11,6 +11,7 @@ type CreatingType = 'folder' | 'file' | null
 
 export function FileTreeItem({
   node,
+  parentId,
   level,
   isExpanded,
   onToggle,
@@ -26,7 +27,11 @@ export function FileTreeItem({
   const [newChildName, setNewChildName] = useState<string>('');
 
   const { setDragged, clearDragged } = useDragContext();
-  const { getRootProps, isDragActive } = useFolderDrop({ folderId: node.id, onMove: crud.onMove });
+  // Folders are dropped into; files are dropped onto their parent folder
+  const { getRootProps: getDropProps, isDragActive } = useFolderDrop({
+    folderId: isFolder ? node.id : parentId,
+    onMove: crud.onMove,
+  });
   const {
     editing: isRenaming,
     value: renameValue,
@@ -66,15 +71,14 @@ export function FileTreeItem({
     if (e.key === 'Escape') setCreatingType(null);
   };
 
-  const folderDropProps = isFolder ? getRootProps() : {};
-
   return (
-    <div className="w-full" {...folderDropProps}>
+    <div className="w-full">
       <div
+        {...getDropProps()}
         className={[
           'group flex items-center gap-1.5 px-2 py-1.5 cursor-pointer rounded transition-colors text-foreground',
           'hover:bg-accent focus:outline-2 focus:outline-primary focus:-outline-offset-2 active:opacity-80',
-          isDragActive && isFolder ? 'ring-2 ring-primary ring-inset' : '',
+          isDragActive ? 'ring-2 ring-primary ring-inset' : '',
         ].join(' ')}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
         onClick={isRenaming ? undefined : handleClick}
@@ -174,6 +178,7 @@ export function FileTreeItem({
               <FileTreeItem
                 key={child.id}
                 node={child}
+                parentId={node.id}
                 level={level + 1}
                 isExpanded={isExpanded}
                 onToggle={onToggle}
