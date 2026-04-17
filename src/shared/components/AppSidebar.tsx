@@ -1,9 +1,9 @@
-import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
-import { openFile } from '@/shared/store/slices/markdownSlice';
+import { useAppSelector } from '@/shared/store/hooks';
 import { selectFileTree } from '@/shared/store/slices/foldersSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImport';
 import { Button } from '@/shared/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +15,7 @@ import {
 import { Download } from 'lucide-react';
 
 export default function AppSidebar() {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const tree = useAppSelector(selectFileTree);
   const { handleImportClick, handleFileChange, inputRef } = useMarkdownImport();
 
@@ -50,7 +50,7 @@ export default function AppSidebar() {
           <SidebarGroupContent className="px-2">
             <FileTree
               data={tree}
-              onFileClick={(file) => dispatch(openFile({ id: file.id, name: file.name }))}
+              onFileClick={(file) => navigate(`/markdown/${file.id}`)}
             />
           </SidebarGroupContent>
         </SidebarGroup>

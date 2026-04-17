@@ -5,6 +5,7 @@ import blocksReducer from './slices/blocksSlice';
 import uiReducer from './slices/uiSlice';
 import foldersReducer from './slices/foldersSlice';
 import markdownReducer from './slices/markdownSlice';
+import imagesReducer from './slices/imagesSlice';
 
 const customStorage = {
   getItem: (key: string) => {
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   folders: foldersReducer,
   markdown: markdownReducer,
+  images: imagesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

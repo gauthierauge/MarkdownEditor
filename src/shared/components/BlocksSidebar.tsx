@@ -15,9 +15,7 @@ export default function BlocksSidebar() {
   return (
     <Sidebar side="right">
       <SidebarHeader className="px-4 py-3">
-        <h2 className="text-lg font-semibold text-sidebar-foreground m-0">
-          Blocs
-        </h2>
+        <h2 className="m-0 text-lg font-semibold text-sidebar-foreground">Blocs</h2>
       </SidebarHeader>
 
       <SidebarContent>

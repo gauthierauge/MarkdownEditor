@@ -31,10 +31,19 @@ const markdownSlice = createSlice({
         saveFileContent(state, action: PayloadAction<{ id: string; content: string }>) {
             state.files[action.payload.id] = action.payload.content;
         },
+        insertIntoOpenFile(state, action: PayloadAction<string>) {
+            if (!state.openFileId) {
+                return;
+            }
+
+            const previous = state.files[state.openFileId] ?? '';
+            const separator = previous.trim().length > 0 ? '\n\n' : '';
+            state.files[state.openFileId] = `${previous}${separator}${action.payload}`;
+        },
     },
 });
 
-export const { openFile, closeFile, saveFileContent } = markdownSlice.actions;
+export const { openFile, closeFile, saveFileContent, insertIntoOpenFile } = markdownSlice.actions;
 export default markdownSlice.reducer;
 
 export const selectOpenFileId = (state: RootState) => state.markdown.openFileId;

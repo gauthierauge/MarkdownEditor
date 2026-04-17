@@ -1,59 +1,133 @@
 import { useState } from 'react';
-import { useAppSelector } from '@/shared/store/hooks';
-import { selectOpenFileId } from '@/shared/store/slices/markdownSlice';
+import {
+  Navigate,
+  NavLink,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useLocation,
+} from 'react-router-dom';
+import type { FileNode } from '@/features/file-tree/types/FileTree.types';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
-import MarkdownEditor from '@/features/markdown-editor/MarkdownEditor';
+import MarkdownRoutePage from '@/features/markdown-editor/MarkdownRoutePage';
+import ImageLibrary from '@/features/image-library/ImageLibrary';
 import AppSidebar from '@/shared/components/AppSidebar';
 import BlocksSidebar from '@/shared/components/BlocksSidebar';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
 import { Button } from '@/shared/components/ui/button';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
+import { cn } from '@/shared/lib/utils';
+import { useAppSelector } from '@/shared/store/hooks';
+import { selectFileTree } from '@/shared/store/slices/foldersSlice';
+import { selectOpenFileId } from '@/shared/store/slices/markdownSlice';
 import { PanelRightIcon } from 'lucide-react';
 
-export default function App() {
+function findFirstFileId(nodes: FileNode[]): string | null {
+  for (const node of nodes) {
+    if (node.type === 'file') {
+      return node.id;
+    }
+
+    if (node.type === 'folder' && node.children) {
+      const nestedId = findFirstFileId(node.children);
+      if (nestedId) {
+        return nestedId;
+      }
+    }
+  }
+
+  return null;
+}
+
+function HomeRedirect() {
   const openFileId = useAppSelector(selectOpenFileId);
+  const fileTree = useAppSelector(selectFileTree);
+  const fallbackId = findFirstFileId(fileTree) ?? '8';
+
+  return <Navigate replace to={`/markdown/${openFileId ?? fallbackId}`} />;
+}
+
+function AppShell() {
+  const location = useLocation();
+  const openFileId = useAppSelector(selectOpenFileId);
+  const fileTree = useAppSelector(selectFileTree);
+  const [rightOpen, setRightOpen] = useState(true);
+  const isMarkdownRoute = location.pathname.startsWith('/markdown');
+  const defaultMarkdownPath = `/markdown/${openFileId ?? findFirstFileId(fileTree) ?? '8'}`;
+
   useShortcutListener();
-  const [rightOpen, setRightOpen] = useState<boolean>(true);
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex items-center gap-2 px-4 py-3 border-b border-sidebar-border">
+        <header className="flex items-center gap-3 border-b border-sidebar-border px-4 py-3">
           <SidebarTrigger />
+
+          <nav className="flex items-center gap-1 rounded-lg border border-border bg-background p-1">
+            {[
+              { label: 'Markdown', to: defaultMarkdownPath },
+              { label: 'Image', to: '/images' },
+            ].map((item) => (
+              <NavLink
+                key={item.label}
+                to={item.to}
+                className={({ isActive }) =>
+                  cn(
+                    'rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors',
+                    isActive && 'bg-primary text-primary-foreground',
+                  )
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+
           <div className="ml-auto">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => setRightOpen((o) => !o)}
-            >
-              <PanelRightIcon />
-              <span className="sr-only">Toggle Blocs</span>
-            </Button>
+            {isMarkdownRoute ? (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setRightOpen((open) => !open)}
+              >
+                <PanelRightIcon />
+                <span className="sr-only">Toggle Blocs</span>
+              </Button>
+            ) : null}
           </div>
         </header>
 
-        {openFileId ? (
-          <div className="flex flex-1 min-h-0">
-            <MarkdownEditor />
-          </div>
-        ) : (
-          <div className="flex flex-1 items-center justify-center p-8">
-            <div className="text-center space-y-2">
-              <p className="text-lg font-medium text-foreground">Aucun fichier ouvert</p>
-              <p className="text-sm text-muted-foreground">
-                Créez ou ouvrez un fichier depuis la sidebar pour commencer.
-              </p>
-            </div>
-          </div>
-        )}
+        <div className="flex min-h-0 flex-1 overflow-auto">
+          <Outlet />
+        </div>
       </SidebarInset>
-      <SidebarProvider
-        open={rightOpen}
-        onOpenChange={setRightOpen}
-        className="w-auto! min-h-0!"
-      >
-        <BlocksSidebar />
-      </SidebarProvider>
+
+      {isMarkdownRoute ? (
+        <SidebarProvider
+          open={rightOpen}
+          onOpenChange={setRightOpen}
+          className="w-auto! min-h-0!"
+        >
+          <BlocksSidebar />
+        </SidebarProvider>
+      ) : null}
     </SidebarProvider>
   );
+}
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <AppShell />,
+    children: [
+      { index: true, element: <HomeRedirect /> },
+      { path: 'markdown/:id', element: <MarkdownRoutePage /> },
+      { path: 'images', element: <ImageLibrary /> },
+      { path: '*', element: <HomeRedirect /> },
+    ],
+  },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }

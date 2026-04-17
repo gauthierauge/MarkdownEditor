@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/shared/store/hooks';
 import { saveFileContent, openFile } from '@/shared/store/slices/markdownSlice';
 import { importFileNode } from '@/shared/store/slices/foldersSlice';
@@ -7,6 +8,7 @@ import { readFileAsText } from '@/features/markdown-editor/services/markdown.ser
 
 export function useMarkdownImport() {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleImportClick = useCallback(() => {
@@ -23,9 +25,10 @@ export function useMarkdownImport() {
             dispatch(importFileNode({ parentId: null, name, id }));
             dispatch(saveFileContent({ id, content: text }));
             dispatch(openFile({ id, name }));
+            navigate(`/markdown/${id}`);
             e.target.value = '';
         },
-        [dispatch]
+        [dispatch, navigate]
     );
 
     return { handleImportClick, handleFileChange, inputRef };
