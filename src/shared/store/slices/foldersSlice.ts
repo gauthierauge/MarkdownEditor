@@ -8,7 +8,7 @@ import {
     removeNode as treeRemove,
     renameNode as treeRename,
     insertIntoFolder,
-} from './folderTree.utils';
+} from '@/features/file-tree/services/tree.service';
 
 const initialTree: FileNode[] = [
     {
