@@ -1,47 +1,51 @@
-import { useState, useEffect } from 'react';
-import { useAppDispatch } from '@/shared/store/hooks.ts';
-import { startCapture, stopCapture } from '@/shared/store/uiSlice.ts';
-import { formatShortcut } from '@/features/block-editor/services/shortcuts.ts';
+import { useCallback, useEffect, useState } from 'react'
+import { formatShortcut } from '@/features/block-editor/services/shortcuts.service'
+import { useAppDispatch } from '@/shared/store/hooks'
+import { startCapture, stopCapture } from '@/shared/store/slices/uiSlice'
 
 export function useShortcutInput(onChange: (shortcut: string | null) => void) {
-  const dispatch = useAppDispatch();
-  const [isCapturing, setIsCapturing] = useState<boolean>(false);
+  const dispatch = useAppDispatch()
+  const [isCapturing, setIsCapturing] = useState(false)
 
   const beginCapture = () => {
-    setIsCapturing(true);
-    dispatch(startCapture());
-  };
+    setIsCapturing(true)
+    dispatch(startCapture())
+  }
 
-  const endCapture = () => {
-    setIsCapturing(false);
-    dispatch(stopCapture());
-  };
+  const endCapture = useCallback(() => {
+    setIsCapturing(false)
+    dispatch(stopCapture())
+  }, [dispatch])
 
   useEffect(() => {
-    if (!isCapturing) return;
+    if (!isCapturing) {
+      return
+    }
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
 
-      if (e.key === 'Escape') {
-        endCapture();
-        return;
+      if (event.key === 'Escape') {
+        endCapture()
+        return
       }
 
-      const formatted = formatShortcut(e);
+      const formatted = formatShortcut(event)
+
       if (formatted) {
-        onChange(formatted);
-        endCapture();
+        onChange(formatted)
+        endCapture()
       }
-    };
+    }
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown)
+
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      dispatch(stopCapture());
-    };
-  }, [isCapturing]);
+      window.removeEventListener('keydown', handleKeyDown)
+      dispatch(stopCapture())
+    }
+  }, [dispatch, endCapture, isCapturing, onChange])
 
-  return { isCapturing, beginCapture };
+  return { beginCapture, isCapturing }
 }

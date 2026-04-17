@@ -1,4 +1,4 @@
-import type { ImageImportExportProps } from '../types'
+import type { ImageImportExportProps } from '../types/ImageImportExport.types'
 
 function useImageImportExport({
   images,

@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
-import { setShortcut } from '@/shared/store/blocksSlice.ts';
+import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
+import { setShortcut, selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 
 export function useShortcutManager() {
   const dispatch = useAppDispatch();
-  const blocks = useAppSelector((s) => s.blocks.blocks);
+  const blocks = useAppSelector(selectAllBlocks);
 
   const handleChange = (id: string, shortcut: string | null) => {
     dispatch(setShortcut({ id, shortcut }));

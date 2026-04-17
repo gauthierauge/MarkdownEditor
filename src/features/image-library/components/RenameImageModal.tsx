@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Button, Input, Modal } from '@/shared/components'
-import type { StoredImage } from '../types'
+import type { StoredImage } from '../types/ImageLibrary.types'
 
 type RenameImageModalProps = {
   image: StoredImage | null
@@ -49,7 +49,7 @@ function RenameImageModalContent({
 
   return (
     <Modal
-      description="Le renommage met à jour le nom affiché et l’alt text Markdown généré."
+      description="Le renommage met a jour le nom affiche et l'alt text Markdown genere."
       footer={
         <>
           <Button form="rename-image-form" type="submit" variant="primary">
@@ -62,14 +62,14 @@ function RenameImageModalContent({
       }
       onClose={onClose}
       open={Boolean(image)}
-      title="Renommer l’image"
+      title="Renommer l'image"
     >
       <form id="rename-image-form" onSubmit={handleSubmit}>
         <Input
           autoFocus
-          label="Nom affiché"
+          label="Nom affiche"
           onChange={(event) => setName(event.target.value)}
-          placeholder="Nom de l’image"
+          placeholder="Nom de l'image"
           value={name}
         />
       </form>

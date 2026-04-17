@@ -1,38 +1,81 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
-import { insertAtCursor, selectCurrentFileId } from '@/shared/store/editorSlice'
 import {
   removeImage,
   renameImage,
   selectImages,
   selectImagesError,
   selectImagesStatus,
+  setImages,
+  setImagesError,
+  setImagesStatus,
   upsertImages,
 } from '@/shared/store/imagesSlice'
+import {
+  insertIntoOpenFile,
+  selectOpenFileId,
+} from '@/shared/store/slices/markdownSlice'
 import { readFileAsDataUrl } from '@/utils/fileReaders'
 import { createStoredImageFromFile } from '@/utils/imageFormat'
-import { deleteImageFromDb, saveImageToDb, saveImagesToDb } from '@/utils/imagesDb'
+import {
+  deleteImageFromDb,
+  getAllImagesFromDb,
+  saveImageToDb,
+  saveImagesToDb,
+} from '@/utils/imagesDb'
 import { buildImageMarkdown } from '@/utils/markdown'
-import type { StoredImage } from '../types'
+import type { StoredImage } from '../types/ImageLibrary.types'
 
 function useImageLibrary() {
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const currentFileId = useAppSelector(selectCurrentFileId)
+  const currentFileId = useAppSelector(selectOpenFileId)
   const images = useAppSelector(selectImages)
   const status = useAppSelector(selectImagesStatus)
   const errorMessage = useAppSelector(selectImagesError)
-  const [searchValue, setSearchValue] = useState('')
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [previewedImage, setPreviewedImage] = useState<StoredImage | null>(null)
   const [renamedImage, setRenamedImage] = useState<StoredImage | null>(null)
 
-  const normalizedSearch = searchValue.trim().toLowerCase()
-  const filteredImages = normalizedSearch
-    ? images.filter((image) => image.name.toLowerCase().includes(normalizedSearch))
-    : images
+  useEffect(() => {
+    if (status !== 'idle') {
+      return
+    }
+
+    let isMounted = true
+
+    async function hydrateImages() {
+      dispatch(setImagesStatus('loading'))
+
+      try {
+        const storedImages = await getAllImagesFromDb()
+
+        if (!isMounted) {
+          return
+        }
+
+        dispatch(setImages(storedImages))
+      } catch (error) {
+        if (!isMounted) {
+          return
+        }
+
+        dispatch(
+          setImagesError(
+            error instanceof Error
+              ? error.message
+              : "Impossible de charger la bibliotheque d'images.",
+          ),
+        )
+      }
+    }
+
+    void hydrateImages()
+
+    return () => {
+      isMounted = false
+    }
+  }, [dispatch, status])
 
   async function mergeImages(nextImages: StoredImage[]) {
     await saveImagesToDb(nextImages)
@@ -43,7 +86,7 @@ function useImageLibrary() {
     const imageFiles = files.filter((file) => file.type.startsWith('image/'))
 
     if (!imageFiles.length) {
-      setStatusMessage('Aucun fichier image valide n’a été détecté.')
+      setStatusMessage('Aucun fichier image valide n a ete detecte.')
       return
     }
 
@@ -58,10 +101,10 @@ function useImageLibrary() {
       )
 
       await mergeImages(storedImages)
-      setStatusMessage(`${storedImages.length} image(s) ajoutée(s) à la bibliothèque.`)
+      setStatusMessage(`${storedImages.length} image(s) ajoutee(s) a la bibliotheque.`)
     } catch (error) {
       setStatusMessage(
-        error instanceof Error ? error.message : 'L’import des images a échoué.',
+        error instanceof Error ? error.message : "L'import des images a echoue.",
       )
     } finally {
       setBusy(false)
@@ -69,12 +112,17 @@ function useImageLibrary() {
   }
 
   function handleInsert(image: StoredImage) {
-    dispatch(insertAtCursor(buildImageMarkdown(image)))
-    setStatusMessage(`Image insérée dans le fichier ${currentFileId}.`)
+    if (!currentFileId) {
+      setStatusMessage("Ouvre d'abord un fichier avant d'inserer une image.")
+      return
+    }
+
+    dispatch(insertIntoOpenFile(buildImageMarkdown(image)))
+    setStatusMessage(`Image inseree dans le fichier ${currentFileId}.`)
   }
 
   async function handleDelete(image: StoredImage) {
-    if (!confirm(`Supprimer l’image "${image.name}" ?`)) {
+    if (!confirm(`Supprimer l'image "${image.name}" ?`)) {
       return
     }
 
@@ -89,7 +137,7 @@ function useImageLibrary() {
       setRenamedImage(null)
     }
 
-    setStatusMessage(`Image "${image.name}" supprimée.`)
+    setStatusMessage(`Image "${image.name}" supprimee.`)
   }
 
   async function handleRename(name: string) {
@@ -112,7 +160,7 @@ function useImageLibrary() {
       }),
     )
     setRenamedImage(null)
-    setStatusMessage(`Image renommée en "${name}".`)
+    setStatusMessage(`Image renommee en "${name}".`)
   }
 
   async function handleImportedImages(importedImages: StoredImage[]) {
@@ -120,38 +168,30 @@ function useImageLibrary() {
 
     try {
       await mergeImages(importedImages)
-      setStatusMessage(`${importedImages.length} image(s) importée(s).`)
+      setStatusMessage(`${importedImages.length} image(s) importee(s).`)
     } catch (error) {
       setStatusMessage(
-        error instanceof Error ? error.message : 'Impossible d’importer ces images.',
+        error instanceof Error ? error.message : 'Impossible d importer ces images.',
       )
     } finally {
       setBusy(false)
     }
   }
 
-  function navigateToCurrentFile() {
-    navigate(`/files/${currentFileId}`)
-  }
-
   return {
     busy,
-    currentFileId,
     errorMessage,
-    filteredImages,
+    filteredImages: images,
     handleDelete,
     handleImageFiles,
     handleImportedImages,
     handleInsert,
     handleRename,
     images,
-    navigateToCurrentFile,
     previewedImage,
     renamedImage,
-    searchValue,
     setPreviewedImage,
     setRenamedImage,
-    setSearchValue,
     setStatusMessage,
     status,
     statusMessage,

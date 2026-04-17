@@ -1,17 +1,24 @@
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '@/shared/store/hooks.ts';
-import { insertAtCursor } from '@/shared/store/editorSlice.ts';
-import { matchShortcut } from '@/features/block-editor/services/shortcuts.ts';
+import { useAppSelector } from '@/shared/store/hooks';
+import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
+import { selectIsCapturingShortcut } from '@/shared/store/slices/uiSlice';
+import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
+import { matchShortcut } from '@/features/block-editor/services/shortcuts.service';
 
 export function useShortcutListener(): void {
-  const dispatch = useAppDispatch();
-  const blocks = useAppSelector((s) => s.blocks.blocks);
-  const isCapturing = useAppSelector((s) => s.ui.isCapturingShortcut);
+  const { insertText } = useEditorInsert();
+  const blocks = useAppSelector(selectAllBlocks);
+  const isCapturing = useAppSelector(selectIsCapturingShortcut);
 
   const isCapturingRef = useRef(isCapturing);
   useEffect(() => {
     isCapturingRef.current = isCapturing;
   }, [isCapturing]);
+
+  const insertTextRef = useRef(insertText);
+  useEffect(() => {
+    insertTextRef.current = insertText;
+  }, [insertText]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,7 +29,7 @@ export function useShortcutListener(): void {
         if (matchShortcut(e, block.shortcut)) {
           e.preventDefault();
           e.stopPropagation();
-          dispatch(insertAtCursor(block.content));
+          insertTextRef.current(block.content);
           return;
         }
       }
@@ -30,5 +37,5 @@ export function useShortcutListener(): void {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [blocks, dispatch]);
+  }, [blocks]);
 }

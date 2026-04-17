@@ -1,7 +1,7 @@
 import ExportImagesButton from './components/ExportImagesButton'
 import ImportImagesButton from './components/ImportImagesButton'
 import useImageImportExport from './hooks/useImageImportExport'
-import type { ImageImportExportProps } from './types'
+import type { ImageImportExportProps } from './types/ImageImportExport.types'
 import './styles/ImageImportExport.css'
 
 function ImageImportExport({

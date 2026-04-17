@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react'
+
 interface DeleteConfirmButtonProps {
   label: string
   onConfirm: () => void
@@ -7,7 +9,7 @@ export function DeleteConfirmButton({
   label,
   onConfirm,
 }: DeleteConfirmButtonProps) {
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
 
     if (window.confirm(`Supprimer "${label}" ?`)) {

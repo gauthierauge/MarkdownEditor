@@ -1,4 +1,4 @@
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import type { Block } from '@/features/block-editor/types/block.types';
 
 export type PartFile = {
   version: string;

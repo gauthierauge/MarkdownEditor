@@ -1,5 +1,6 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import type { Block } from '@/features/block-editor/types/block.types';
+import type { RootState } from '../index';
 
 interface BlocksState {
   blocks: Block[];
@@ -62,3 +63,7 @@ const blocksSlice = createSlice({
 export const { addBlock, updateBlock, deleteBlock, renameBlock, setShortcut, importBlocks } =
   blocksSlice.actions;
 export default blocksSlice.reducer;
+
+export const selectAllBlocks = (state: RootState) => state.blocks.blocks;
+export const selectBlockById = (state: RootState, id: string) =>
+  state.blocks.blocks.find((b) => b.id === id);

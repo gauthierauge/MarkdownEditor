@@ -1,18 +1,17 @@
-import { useAppDispatch } from '@/shared/store/hooks.ts';
-import { insertAtCursor } from '@/shared/store/editorSlice.ts';
-import { selectBlock } from '@/shared/store/uiSlice.ts';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
+import type { Block } from '@/features/block-editor/types/block.types';
+import type React from 'react';
 
-export function useBlockListItem(block: Block) {
-  const dispatch = useAppDispatch();
+export function useBlockListItem(block: Block, onEdit: (blockId: string) => void) {
+  const { insertText } = useEditorInsert();
 
   const handleInsert = () => {
-    dispatch(insertAtCursor(block.content));
+    insertText(block.content);
   };
 
-  const handleEdit = (e: React.MouseEvent) => {
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    dispatch(selectBlock(block.id));
+    onEdit(block.id);
   };
 
   return { handleInsert, handleEdit };

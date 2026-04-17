@@ -1,30 +1,39 @@
-import { useBlockListItem } from './useBlockListItem.ts'
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { Badge } from '@/shared/components/ui/badge'
+import { Button } from '@/shared/components/ui/button'
+import { useBlockListItem } from './useBlockListItem'
+import type { Block } from '@/features/block-editor/types/block.types'
 
-type Props = { block: Block }
+type Props = {
+  block: Block
+  onEdit: (blockId: string) => void
+}
 
-export default function BlockListItem({ block }: Props) {
-  const { handleInsert, handleEdit } = useBlockListItem(block)
+function BlockListItem({ block, onEdit }: Props) {
+  const { handleEdit, handleInsert } = useBlockListItem(block, onEdit)
 
   return (
     <div
+      className="group flex items-center gap-2 rounded px-3 py-2 transition-colors hover:bg-accent"
       onClick={handleInsert}
-      className="group flex cursor-pointer items-center gap-2 rounded-[12px] px-3 py-2 transition-colors hover:bg-[var(--color-primary-soft)]"
     >
-      <span className="flex-1 truncate text-sm text-[var(--color-text)]">
-        {block.name}
-      </span>
-      {block.shortcut && (
-        <span className="rounded-full bg-[var(--color-surface-muted)] px-2 py-1 font-mono text-[11px] text-[var(--color-text-muted)]">
+      <span className="flex-1 truncate text-sm text-foreground">{block.name}</span>
+
+      {block.shortcut ? (
+        <Badge className="font-mono" variant="outline">
           {block.shortcut}
-        </span>
-      )}
-      <button
+        </Badge>
+      ) : null}
+
+      <Button
+        className="opacity-0 transition-opacity group-hover:opacity-100"
         onClick={handleEdit}
-        className="cursor-pointer px-1 text-sm text-[var(--color-text-muted)] opacity-0 transition-opacity hover:text-[var(--color-primary)] group-hover:opacity-100"
+        size="icon-xs"
+        variant="ghost"
       >
         Editer
-      </button>
+      </Button>
     </div>
   )
 }
+
+export default BlockListItem

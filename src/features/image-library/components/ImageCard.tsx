@@ -1,6 +1,6 @@
 import ExportImagesButton from '@/features/image-import-export/components/ExportImagesButton'
 import { Button } from '@/shared/components'
-import type { StoredImage } from '../types'
+import type { StoredImage } from '../types/ImageLibrary.types'
 
 type ImageCardProps = {
   image: StoredImage
@@ -39,7 +39,7 @@ function ImageCard({
           {image.name}
         </button>
         <p className="image-card__meta">
-          {image.mimeType} · {Math.max(1, Math.round(image.byteSize / 1024))} Ko
+          {image.mimeType} - {Math.max(1, Math.round(image.byteSize / 1024))} Ko
         </p>
         <p className="image-card__hint">
           Clique la miniature pour ouvrir l'image en grand.

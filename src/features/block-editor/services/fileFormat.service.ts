@@ -1,5 +1,6 @@
-import type { Block } from '@/features/block-editor/types/block.types.ts';
-import type { PartFile, PartsFile, ParsedFile } from '@/features/block-editor/types/fileFormat.types.ts';
+import type { Block } from '@/features/block-editor/types/block.types';
+import type { PartFile, PartsFile, ParsedFile } from '@/features/block-editor/types/fileFormat.types';
+export { downloadFile } from '@/shared/lib/downloadFile';
 
 function normalizeBlock(raw: Record<string, unknown>): Block {
   if (typeof raw.name !== 'string' || !raw.name) throw new Error('Bloc invalide : "name" requis');
@@ -55,12 +56,3 @@ export function sanitizeFilename(name: string): string {
   return name.trim().toLowerCase().replace(/[^a-z0-9]+/gi, '-');
 }
 
-export function downloadFile(filename: string, content: string, mimeType = 'application/json') {
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}

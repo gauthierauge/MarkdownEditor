@@ -1,57 +1,71 @@
-import { useImportExport } from './useImportExport.ts'
-import ExportButton from './ExportButton.tsx'
-import ImportButton from './ImportButton.tsx'
+import ExportButton from './ExportButton'
+import ImportButton from './ImportButton'
+import { useImportExport } from './useImportExport'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 
-export default function ImportExport() {
+function ImportExport() {
   const {
     blocks,
-    selectedExportId,
-    setSelectedExportId,
-    selectedBlock,
+    feedback,
     getAllContent,
     getAllFilename,
     getSingleContent,
     getSingleFilename,
-    handleImport,
     handleError,
-    feedback,
+    handleImport,
+    selectedBlock,
+    selectedExportId,
+    setSelectedExportId,
   } = useImportExport()
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <ExportButton
-        label="Exporter tout"
-        getFilename={getAllFilename}
-        getContent={getAllContent}
-        disabled={blocks.length === 0}
-      />
-
-      <div className="flex items-center gap-1">
-        <select
-          value={selectedExportId}
-          onChange={(event) => setSelectedExportId(event.target.value)}
-          className="cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-1.5 text-xs text-[var(--color-text)] outline-none"
-        >
-          <option value="">Choisir un bloc</option>
-          {blocks.map((block) => (
-            <option key={block.id} value={block.id}>
-              {block.name}
-            </option>
-          ))}
-        </select>
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-2">
         <ExportButton
-          label="Exporter"
-          getFilename={getSingleFilename}
-          getContent={getSingleContent}
+          disabled={blocks.length === 0}
+          getContent={getAllContent}
+          getFilename={getAllFilename}
+          label="Exporter tout"
+        />
+        <ImportButton onError={handleError} onImport={handleImport} />
+      </div>
+
+      <div className="flex gap-2">
+        <Select
+          onValueChange={(value) => setSelectedExportId(value ?? '')}
+          value={selectedExportId || undefined}
+        >
+          <SelectTrigger className="flex-1" size="sm">
+            <SelectValue placeholder="Choisir un bloc" />
+          </SelectTrigger>
+          <SelectContent>
+            {blocks.map((block) => (
+              <SelectItem key={block.id} value={block.id}>
+                {block.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <ExportButton
           disabled={!selectedBlock}
+          getContent={getSingleContent}
+          getFilename={getSingleFilename}
+          label="Exporter"
         />
       </div>
 
-      <ImportButton onImport={handleImport} onError={handleError} />
-
       {feedback ? (
-        <span className="text-xs text-[var(--color-primary)]">{feedback}</span>
+        <span className="text-xs text-emerald-500">{feedback}</span>
       ) : null}
     </div>
   )
 }
+
+export default ImportExport

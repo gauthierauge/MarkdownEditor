@@ -1,97 +1,80 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import {
   Navigate,
+  Outlet,
   RouterProvider,
   createBrowserRouter,
-  useParams,
 } from 'react-router-dom'
-import BlockEditor from '@/features/block-editor/BlockEditor'
-import MainEditor from '@/features/block-editor/components/MainEditor/MainEditor'
+import { PanelRightIcon } from 'lucide-react'
+import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener'
 import ImageLibrary from '@/features/image-library/ImageLibrary'
-import { AppLayout, Panel } from '@/shared/components'
-import { useAppDispatch } from '@/shared/hooks'
+import MarkdownRoutePage from '@/features/markdown-editor/MarkdownRoutePage'
+import AppSidebar from '@/shared/components/AppSidebar'
+import BlocksSidebar from '@/shared/components/BlocksSidebar'
+import { Button } from '@/shared/components/ui/button'
 import {
-  openFile,
-  setImages,
-  setImagesError,
-  setImagesStatus,
-} from '@/shared/store'
-import { getAllImagesFromDb } from '@/utils/imagesDb'
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/shared/components/ui/sidebar'
+import { useAppSelector } from '@/shared/store/hooks'
+import { selectOpenFileId } from '@/shared/store/slices/markdownSlice'
 
-function FileEditorPage() {
-  const { id } = useParams()
-  const dispatch = useAppDispatch()
-  const fileId = id ?? 'welcome'
-
-  useEffect(() => {
-    dispatch(openFile(fileId))
-  }, [dispatch, fileId])
+function AppShell() {
+  const openFileId = useAppSelector(selectOpenFileId)
+  const [rightOpen, setRightOpen] = useState(true)
+  useShortcutListener()
 
   return (
-    <div className="page">
-      <Panel
-        description={`Edition du fichier ${fileId}. Le contenu insere depuis le bloc images apparait ici.`}
-        title={`Fichier ${fileId}`}
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset className="min-h-0 overflow-hidden">
+        <header className="flex items-center gap-2 border-b border-sidebar-border px-4 py-3">
+          <SidebarTrigger />
+
+          <div className="ml-auto">
+            <Button
+              onClick={() => setRightOpen((open) => !open)}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <PanelRightIcon />
+              <span className="sr-only">Afficher ou masquer les blocs</span>
+            </Button>
+          </div>
+        </header>
+
+        <div className="flex min-h-0 flex-1 flex-col">
+          <Outlet />
+        </div>
+      </SidebarInset>
+
+      <SidebarProvider
+        className="w-auto! min-h-0!"
+        onOpenChange={setRightOpen}
+        open={rightOpen}
       >
-        <MainEditor />
-      </Panel>
-    </div>
+        <BlocksSidebar />
+      </SidebarProvider>
+    </SidebarProvider>
   )
 }
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout />,
+    element: <AppShell />,
     children: [
-      { index: true, element: <Navigate replace to="/files/welcome" /> },
-      { path: 'files/:id', element: <FileEditorPage /> },
-      { path: 'blocks', element: <BlockEditor /> },
+      { index: true, element: <Navigate replace to="/markdown/welcome" /> },
+      { path: 'markdown', element: <Navigate replace to="/markdown/welcome" /> },
+      { path: 'markdown/:id', element: <MarkdownRoutePage /> },
       { path: 'images', element: <ImageLibrary /> },
-      { path: '*', element: <Navigate replace to="/files/welcome" /> },
+      { path: '*', element: <Navigate replace to="/markdown/welcome" /> },
     ],
   },
 ])
 
 function App() {
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    let isMounted = true
-
-    async function hydrateImages() {
-      dispatch(setImagesStatus('loading'))
-
-      try {
-        const images = await getAllImagesFromDb()
-
-        if (!isMounted) {
-          return
-        }
-
-        dispatch(setImages(images))
-      } catch (error) {
-        if (!isMounted) {
-          return
-        }
-
-        dispatch(
-          setImagesError(
-            error instanceof Error
-              ? error.message
-              : "Impossible de charger la bibliotheque d'images.",
-          ),
-        )
-      }
-    }
-
-    void hydrateImages()
-
-    return () => {
-      isMounted = false
-    }
-  }, [dispatch])
-
   return <RouterProvider router={router} />
 }
 

@@ -1,5 +1,5 @@
-import type { StoredImage } from '../types'
 import { Button, Modal } from '@/shared/components'
+import type { StoredImage } from '../types/ImageLibrary.types'
 
 type ImagePreviewModalProps = {
   image: StoredImage | null
@@ -18,11 +18,11 @@ function ImagePreviewModal({
 
   return (
     <Modal
-      description="Prévisualisation complète de l’image avant insertion."
+      description="Previsualisation complete de l'image avant insertion."
       footer={
         <>
           <Button onClick={() => onInsert(image)} variant="secondary">
-            Insérer dans l’éditeur
+            Inserer dans l'editeur
           </Button>
           <Button onClick={onClose} variant="ghost">
             Fermer
@@ -45,7 +45,7 @@ function ImagePreviewModal({
             <dd>{Math.round(image.byteSize / 1024)} Ko</dd>
           </div>
           <div>
-            <dt>Ajoutée</dt>
+            <dt>Ajoutee</dt>
             <dd>{new Date(image.createdAt).toLocaleString()}</dd>
           </div>
         </dl>

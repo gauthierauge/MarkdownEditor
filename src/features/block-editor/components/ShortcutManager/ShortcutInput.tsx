@@ -1,33 +1,32 @@
-import { useShortcutInput } from './useShortcutInput.ts'
+import { Button } from '@/shared/components/ui/button'
+import { useShortcutInput } from './useShortcutInput'
 
 type Props = {
-  value: string | null
   onChange: (shortcut: string | null) => void
+  value: string | null
 }
 
-export default function ShortcutInput({ value, onChange }: Props) {
-  const { isCapturing, beginCapture } = useShortcutInput(onChange)
+function ShortcutInput({ onChange, value }: Props) {
+  const { beginCapture, isCapturing } = useShortcutInput(onChange)
 
   return (
     <div className="flex items-center gap-1">
-      <button
+      <Button
+        className={isCapturing ? 'animate-pulse border-ring text-foreground' : 'font-mono'}
         onClick={beginCapture}
-        className={`cursor-pointer rounded-full border px-3 py-1.5 font-mono text-xs transition-colors ${
-          isCapturing
-            ? 'border-[rgba(31,79,143,0.28)] bg-[var(--color-primary-soft)] text-[var(--color-primary)]'
-            : 'border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)]'
-        }`}
+        size="xs"
+        variant="outline"
       >
-        {isCapturing ? 'Appuyez sur une combinaison...' : value ?? 'Aucun raccourci'}
-      </button>
-      {value && (
-        <button
-          onClick={() => onChange(null)}
-          className="cursor-pointer px-1 text-xs text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-danger)]"
-        >
-          Effacer
-        </button>
-      )}
+        {isCapturing ? 'Appuye sur une combinaison...' : value ?? 'Aucun raccourci'}
+      </Button>
+
+      {value ? (
+        <Button onClick={() => onChange(null)} size="icon-xs" variant="ghost">
+          X
+        </Button>
+      ) : null}
     </div>
   )
 }
+
+export default ShortcutInput

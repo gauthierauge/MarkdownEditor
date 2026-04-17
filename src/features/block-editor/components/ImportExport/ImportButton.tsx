@@ -1,49 +1,64 @@
-import { useRef } from 'react'
-import { deserializeFile } from '@/features/block-editor/services/fileFormat.ts';
-import type { Block } from '@/features/block-editor/types/block.types.ts';
+import { useRef, type ChangeEvent } from 'react'
+import { deserializeFile } from '@/features/block-editor/services/fileFormat.service'
+import type { Block } from '@/features/block-editor/types/block.types'
+import { Button } from '@/shared/components/ui/button'
 
 type Props = {
-  onImport: (blocks: Block[]) => void
   onError?: (message: string) => void
+  onImport: (blocks: Block[]) => void
 }
 
-export default function ImportButton({ onImport, onError }: Props) {
+function ImportButton({ onError, onImport }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
+
+    if (!file) {
+      return
+    }
 
     const reader = new FileReader()
+
     reader.onload = () => {
       try {
         const parsed = deserializeFile(reader.result as string)
         onImport(parsed.blocks)
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Erreur inconnue'
-        onError ? onError(message) : alert('Erreur import : ' + message)
+        if (onError) {
+          onError(message)
+        } else {
+          alert(`Erreur import : ${message}`)
+        }
       }
     }
+
     reader.readAsText(file)
 
-    if (inputRef.current) inputRef.current.value = ''
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
   }
 
   return (
     <>
-      <button
+      <Button
         onClick={() => inputRef.current?.click()}
-        className="cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-primary)] px-3 py-1.5 text-xs text-white transition-colors hover:brightness-95"
+        size="xs"
+        variant="outline"
       >
         Importer
-      </button>
+      </Button>
       <input
+        accept=".mdlc,.part.mdlc,.parts.mdlc,application/json"
+        className="hidden"
+        onChange={handleChange}
         ref={inputRef}
         type="file"
-        accept=".mdlc,.part.mdlc,.parts.mdlc,application/json"
-        onChange={handleChange}
-        className="hidden"
       />
     </>
   )
 }
+
+export default ImportButton

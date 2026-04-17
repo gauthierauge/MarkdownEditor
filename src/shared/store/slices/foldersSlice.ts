@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { FileNode } from '@/features/file-tree/types/FileTree.types';
+import type { RootState } from '../index';
 import {
     createFolderNode,
     createFileNode,
@@ -7,7 +8,7 @@ import {
     removeNode as treeRemove,
     renameNode as treeRename,
     insertIntoFolder,
-} from './folderTree.utils';
+} from '@/features/file-tree/services/tree.service';
 
 const initialTree: FileNode[] = [
     {
@@ -81,6 +82,10 @@ const foldersSlice = createSlice({
             const { parentId, name } = action.payload;
             state.tree = insertIntoFolder(state.tree, parentId, createFileNode(name));
         },
+        importFileNode(state, action: PayloadAction<{ parentId: string | null; name: string; id: string }>) {
+            const { parentId, name, id } = action.payload;
+            state.tree = insertIntoFolder(state.tree, parentId, { id, name, type: 'file' });
+        },
     },
 });
 
@@ -90,5 +95,8 @@ export const {
     moveNode,
     createFolder,
     createFile,
+    importFileNode,
 } = foldersSlice.actions;
 export default foldersSlice.reducer;
+
+export const selectFileTree = (state: RootState) => state.folders.tree;

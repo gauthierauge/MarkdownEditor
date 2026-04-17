@@ -1,29 +1,28 @@
-import { downloadFile } from '@/features/block-editor/services/fileFormat.ts'
+import { downloadFile } from '@/features/block-editor/services/fileFormat.service'
+import { Button } from '@/shared/components/ui/button'
 
 type Props = {
-  label: string
-  getFilename: () => string
-  getContent: () => string
   disabled?: boolean
+  getContent: () => string
+  getFilename: () => string
+  label: string
 }
 
-export default function ExportButton({
-  label,
-  getFilename,
-  getContent,
+function ExportButton({
   disabled,
+  getContent,
+  getFilename,
+  label,
 }: Props) {
   const handleClick = () => {
     downloadFile(getFilename(), getContent())
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={disabled}
-      className="cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-1.5 text-xs text-[var(--color-text)] transition-colors hover:border-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-40"
-    >
+    <Button disabled={disabled} onClick={handleClick} size="xs" variant="outline">
       {label}
-    </button>
+    </Button>
   )
 }
+
+export default ExportButton

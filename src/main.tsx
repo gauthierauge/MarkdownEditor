@@ -2,16 +2,19 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import App from './App.tsx'
+import App from './App'
+import { EditorInsertProvider } from './shared/context/editor-insert/EditorInsertProvider'
+import { persistor, store } from './shared/store'
 import './index.css'
 import './main.css'
-import { persistor, store } from './shared/store'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <EditorInsertProvider>
+          <App />
+        </EditorInsertProvider>
       </PersistGate>
     </Provider>
   </StrictMode>,

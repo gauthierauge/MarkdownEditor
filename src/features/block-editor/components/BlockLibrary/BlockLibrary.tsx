@@ -1,25 +1,55 @@
-import { useBlockLibrary } from './useBlockLibrary.ts'
-import SearchBar from './SearchBar.tsx'
-import BlockListItem from './BlockListItem.tsx'
+import { useState } from 'react'
+import BlockFormDialog from '../BlockForm/BlockFormDialog'
+import SearchBar from './SearchBar'
+import BlockListItem from './BlockListItem'
+import { useBlockLibrary } from './useBlockLibrary'
+import { Button } from '@/shared/components/ui/button'
 
-export default function BlockLibrary() {
+function BlockLibrary() {
   const { blocks, filtered, searchQuery, setSearchQuery } = useBlockLibrary()
+  const [dialogBlockId, setDialogBlockId] = useState<string | undefined>()
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const openCreate = () => {
+    setDialogBlockId(undefined)
+    setDialogOpen(true)
+  }
+
+  const openEdit = (blockId: string) => {
+    setDialogBlockId(blockId)
+    setDialogOpen(true)
+  }
 
   return (
-    <div className="flex h-full flex-col gap-3 rounded-[20px] border border-[rgba(215,221,228,0.9)] bg-white/90 p-4 shadow-[var(--color-shadow)]">
-      <h2 className="m-0 text-xs font-semibold uppercase tracking-widest text-[var(--color-primary)]">
-        Bibliotheque de blocs
-      </h2>
-      <SearchBar value={searchQuery} onChange={setSearchQuery} />
+    <>
+      <div className="mb-3 flex items-center gap-2">
+        <div className="flex-1">
+          <SearchBar onChange={setSearchQuery} value={searchQuery} />
+        </div>
+        <Button onClick={openCreate} size="xs" variant="outline">
+          + Nouveau
+        </Button>
+      </div>
+
       <div className="flex-1 overflow-y-auto">
         {filtered.length === 0 ? (
-          <p className="py-4 text-center text-sm italic text-[var(--color-text-muted)]">
+          <p className="py-4 text-center text-sm italic text-muted-foreground">
             {blocks.length === 0 ? 'Aucun bloc' : 'Aucun resultat'}
           </p>
         ) : (
-          filtered.map((block) => <BlockListItem key={block.id} block={block} />)
+          filtered.map((block) => (
+            <BlockListItem block={block} key={block.id} onEdit={openEdit} />
+          ))
         )}
       </div>
-    </div>
+
+      <BlockFormDialog
+        blockId={dialogBlockId}
+        onOpenChange={setDialogOpen}
+        open={dialogOpen}
+      />
+    </>
   )
 }
+
+export default BlockLibrary

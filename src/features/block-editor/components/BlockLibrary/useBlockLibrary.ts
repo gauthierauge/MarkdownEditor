@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useAppSelector } from '@/shared/store/hooks.ts';
+import { useAppSelector } from '@/shared/store/hooks';
+import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 
 export function useBlockLibrary() {
-  const blocks = useAppSelector((s) => s.blocks.blocks);
+  const blocks = useAppSelector(selectAllBlocks);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const filtered = blocks.filter((b) =>

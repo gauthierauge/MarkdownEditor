@@ -1,20 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
-import blocksReducer from './blocksSlice'
-import editorReducer, {
-  insertAtCursor,
-  openFile,
-  setContent,
-  setCursorPosition,
-  setSelection,
-} from './editorSlice'
-import foldersReducer from './foldersSlice'
-import imagesReducer, {
-  setImages,
-  setImagesError,
-  setImagesStatus,
-} from './imagesSlice'
-import uiReducer from './uiSlice'
+import imagesReducer from './imagesSlice'
+import blocksReducer from './slices/blocksSlice'
+import foldersReducer from './slices/foldersSlice'
+import markdownReducer from './slices/markdownSlice'
+import uiReducer from './slices/uiSlice'
 
 const storage = {
   getItem: (key: string) => Promise.resolve(window.localStorage.getItem(key)),
@@ -28,19 +18,19 @@ const storage = {
   },
 }
 
+const rootReducer = combineReducers({
+  blocks: blocksReducer,
+  folders: foldersReducer,
+  images: imagesReducer,
+  markdown: markdownReducer,
+  ui: uiReducer,
+})
+
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['blocks', 'editor', 'folders'],
+  whitelist: ['blocks', 'folders', 'markdown'],
 }
-
-const rootReducer = combineReducers({
-  blocks: blocksReducer,
-  editor: editorReducer,
-  folders: foldersReducer,
-  images: imagesReducer,
-  ui: uiReducer,
-})
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -65,14 +55,3 @@ export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-
-export {
-  insertAtCursor,
-  openFile,
-  setContent,
-  setCursorPosition,
-  setImages,
-  setImagesError,
-  setImagesStatus,
-  setSelection,
-}
