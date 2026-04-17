@@ -7,15 +7,12 @@ export function useShortcutInput(onChange: (shortcut: string | null) => void) {
   const dispatch = useAppDispatch();
   const [isCapturing, setIsCapturing] = useState<boolean>(false);
 
-  const beginCapture = () => {
-    setIsCapturing(true);
-    dispatch(startCapture());
-  };
+  const beginCapture = () => setIsCapturing(true);
 
-  const endCapture = () => {
-    setIsCapturing(false);
-    dispatch(stopCapture());
-  };
+  useEffect(() => {
+    if (isCapturing) dispatch(startCapture());
+    return () => { dispatch(stopCapture()); };
+  }, [dispatch, isCapturing]);
 
   useEffect(() => {
     if (!isCapturing) return;
@@ -25,23 +22,20 @@ export function useShortcutInput(onChange: (shortcut: string | null) => void) {
       e.stopPropagation();
 
       if (e.key === 'Escape') {
-        endCapture();
+        setIsCapturing(false);
         return;
       }
 
       const formatted = formatShortcut(e);
       if (formatted) {
         onChange(formatted);
-        endCapture();
+        setIsCapturing(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      dispatch(stopCapture());
-    };
-  }, [isCapturing]);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isCapturing, onChange]);
 
   return { isCapturing, beginCapture };
 }

@@ -20,7 +20,7 @@ export function useMarkdownEditor() {
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const latestRef = useRef({ content: draft.content, handleChange: (_v: string) => {} });
+    const latestRef = useRef<{ content: string; handleChange(v: string): void }>({ content: draft.content, handleChange() {} });
 
     if (draft.fileId !== openFileId) {
         setDraft({ fileId: openFileId, content: savedContent });
