@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { downloadFile } from '@/features/block-editor/services/fileFormat.service';
 import { Button } from '@/shared/components/ui/button';
 import { Upload } from 'lucide-react';
@@ -12,6 +13,7 @@ type Props = {
 export default function ExportButton({ label, getFilename, getContent, disabled }: Props) {
   const handleClick = () => {
     downloadFile(getFilename(), getContent());
+    toast.success('Bloc(s) exporté(s).');
   };
 
   return (

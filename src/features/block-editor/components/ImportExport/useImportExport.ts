@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import { importBlocks, selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/services/fileFormat.service';
@@ -8,7 +9,6 @@ export function useImportExport() {
   const dispatch = useAppDispatch();
   const blocks = useAppSelector(selectAllBlocks);
   const [selectedExportId, setSelectedExportId] = useState<string>('');
-  const [feedback, setFeedback] = useState<string | null>(null);
 
   const selectedBlock = blocks.find((b) => b.id === selectedExportId);
 
@@ -27,14 +27,13 @@ export function useImportExport() {
   const handleImport = useCallback(
     (imported: Block[]) => {
       dispatch(importBlocks(imported));
-      setFeedback(`${imported.length} bloc${imported.length > 1 ? 's' : ''} importé${imported.length > 1 ? 's' : ''}`);
-      setTimeout(() => setFeedback(null), 3000);
+      toast.success(`${imported.length} bloc${imported.length > 1 ? 's' : ''} importé${imported.length > 1 ? 's' : ''}`);
     },
     [dispatch],
   );
 
   const handleError = useCallback((msg: string) => {
-    alert('Erreur import : ' + msg);
+    toast.error('Erreur import : ' + msg);
   }, []);
 
   return {
@@ -48,6 +47,5 @@ export function useImportExport() {
     getSingleFilename,
     handleImport,
     handleError,
-    feedback,
   };
 }

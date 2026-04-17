@@ -1,11 +1,11 @@
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
+import { Download, Upload } from 'lucide-react';
 import { ImageCard } from './components/ImageCard';
 import { ImageDropZone } from './components/ImageDropZone';
 import { ImagePreviewDialog } from './components/ImagePreviewDialog';
 import { RenameImageDialog } from './components/RenameImageDialog';
 import { useImageLibrary } from './hooks/useImageLibrary';
-import './styles/ImageLibrary.css';
 
 export default function ImageLibrary() {
   const {
@@ -17,7 +17,6 @@ export default function ImageLibrary() {
     openFileName,
     query,
     setQuery,
-    feedback,
     previewedImage,
     renamedImage,
     importInputRef,
@@ -35,117 +34,64 @@ export default function ImageLibrary() {
   } = useImageLibrary();
 
   return (
-    <div className="image-library-page">
-      <div className="image-library-page__header">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-            Bibliothèque d’images
-          </p>
-          <h1 className="text-3xl font-semibold text-foreground">Images</h1>
-          <p className="text-sm text-muted-foreground">
-            Upload, drag and drop, insertion Markdown et import/export de la bibliothèque.
-          </p>
-        </div>
+    <div className="flex flex-col gap-2">
+      <ImageDropZone onFilesSelected={handleFilesSelected} />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            ref={importInputRef}
-            type="file"
-            accept=".img.mdlc,.imgs.mdlc,application/json"
-            className="hidden"
-            onChange={handleImportChange}
-          />
-          <Button variant="outline" onClick={openImportDialog}>
-            Importer
-          </Button>
-          <Button variant="outline" onClick={handleExportLibrary} disabled={images.length === 0}>
-            Exporter la bibliothèque
-          </Button>
-        </div>
+      <div className="flex items-center gap-1">
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Rechercher…"
+          className="h-7 min-w-0 flex-1 text-xs"
+        />
+        <input
+          ref={importInputRef}
+          type="file"
+          accept=".img.mdlc,.imgs.mdlc,application/json"
+          className="hidden"
+          onChange={handleImportChange}
+        />
+        <Button variant="outline" size="icon-xs" onClick={openImportDialog} title="Importer">
+          <Download />
+        </Button>
+        <Button variant="outline" size="icon-xs" onClick={handleExportLibrary} disabled={images.length === 0} title="Exporter tout">
+          <Upload />
+        </Button>
       </div>
 
-      <div className="image-library-page__top">
-        <section className="image-panel">
-          <h2 className="image-panel__title">Ajout et insertion</h2>
-          <ImageDropZone onFilesSelected={handleFilesSelected} />
-
-          <div className="image-panel__hint">
-            {openFileId ? (
-              <span>
-                Le bouton <strong>Insérer</strong> ajoutera l’image dans{' '}
-                <strong>{openFileName ?? openFileId}</strong>.
-              </span>
-            ) : (
-              <span>Ouvre un fichier Markdown avant d’utiliser le bouton Insérer.</span>
-            )}
-          </div>
-        </section>
-
-        <section className="image-panel">
-          <h2 className="image-panel__title">Recherche</h2>
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Nom d'image"
-          />
-
-          <div className="image-panel__help">
-            <p><code>.img.mdlc</code> pour une image unique.</p>
-            <p><code>.imgs.mdlc</code> pour toute la bibliothèque.</p>
-            <p>Les images sont stockées en local dans IndexedDB.</p>
-          </div>
-        </section>
-      </div>
-
-      {feedback ? (
-        <div
-          className={`image-feedback ${
-            feedback.tone === 'error' ? 'is-error' : 'is-success'
-          }`}
-        >
-          {feedback.message}
+      {imagesError ? (
+        <div className="rounded-md px-2 py-1 text-[11px] bg-red-500/8 text-red-700">
+          {imagesError}
         </div>
       ) : null}
 
-      {imagesError ? <div className="image-feedback is-error">{imagesError}</div> : null}
+      {openFileId ? (
+        <p className="m-0 truncate text-[10px] text-muted-foreground">
+          Insertion dans <strong>{openFileName ?? openFileId}</strong>
+        </p>
+      ) : null}
 
-      <section className="image-panel image-gallery-panel">
-        <div className="image-gallery-panel__header">
-          <div>
-            <h2 className="image-panel__title">Galerie</h2>
-            <p className="text-sm text-muted-foreground">
-              {images.length} image(s) dans la bibliothèque.
-            </p>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            {imagesStatus === 'loading' ? 'Chargement…' : `${filteredImages.length} image(s) visibles`}
-          </div>
+      <div className="text-[10px] text-muted-foreground">
+        {imagesStatus === 'loading' ? 'Chargement…' : `${filteredImages.length} / ${images.length} image(s)`}
+      </div>
+
+      {filteredImages.length > 0 ? (
+        <div className="grid grid-cols-3 gap-1.5">
+          {filteredImages.map((image) => (
+            <ImageCard
+              key={image.id}
+              image={image}
+              canInsert={canInsert}
+              onPreview={setPreviewedImage}
+              onInsert={handleInsert}
+            />
+          ))}
         </div>
-
-        {filteredImages.length > 0 ? (
-          <div className="image-grid">
-            {filteredImages.map((image) => (
-              <ImageCard
-                key={image.id}
-                image={image}
-                canInsert={canInsert}
-                onPreview={setPreviewedImage}
-                onRename={setRenamedImage}
-                onDelete={(target) => void handleDelete(target)}
-                onInsert={handleInsert}
-                onExport={handleExportSingle}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="image-empty-state">
-            <p className="font-medium text-foreground">Aucune image à afficher</p>
-            <p className="text-sm text-muted-foreground">
-              Ajoute des images avec le bouton Parcourir, le drag and drop ou l’import .img/.imgs.mdlc.
-            </p>
-          </div>
-        )}
-      </section>
+      ) : (
+        <p className="py-4 text-center text-xs text-muted-foreground">
+          Aucune image.
+        </p>
+      )}
 
       <ImagePreviewDialog
         image={previewedImage}
@@ -157,6 +103,9 @@ export default function ImageLibrary() {
           }
         }}
         onInsert={handleInsert}
+        onRename={setRenamedImage}
+        onExport={handleExportSingle}
+        onDelete={(target) => void handleDelete(target)}
       />
 
       <RenameImageDialog

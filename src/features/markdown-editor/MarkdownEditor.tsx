@@ -3,7 +3,8 @@ import { useMarkdownExport } from './hooks/useMarkdownExport';
 import BlockInsertMenu from './components/BlockInsertMenu';
 import { Button } from '@/shared/components/ui/button';
 import MarkdownPreview from '@/shared/components/MarkdownPreview';
-import { Upload, X } from 'lucide-react';
+import { toast } from 'sonner';
+import { Trash2, Upload, X } from 'lucide-react';
 
 export default function MarkdownEditor() {
   const {
@@ -35,6 +36,9 @@ export default function MarkdownEditor() {
           </Button>
           <Button variant="outline" size="xs" onClick={handleExport} title="Exporter en .md">
             <Upload className="h-3.5 w-3.5" /> Exporter
+          </Button>
+          <Button variant="outline" size="xs" onClick={() => { handleChange(''); toast.success('Contenu vidé.'); }} disabled={!content} title="Vider le contenu">
+            <Trash2 className="h-3.5 w-3.5" /> Vider
           </Button>
           <Button variant="outline" size="xs" onClick={handleClose} title="Fermer le fichier">
             <X className="h-3.5 w-3.5" /> Fermer

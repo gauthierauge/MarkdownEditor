@@ -17,7 +17,6 @@ export default function ImportExport() {
     getAllContent, getAllFilename,
     getSingleContent, getSingleFilename,
     handleImport, handleError,
-    feedback,
   } = useImportExport();
 
   return (
@@ -54,9 +53,6 @@ export default function ImportExport() {
         />
       </div>
 
-      {feedback && (
-        <span className="text-xs text-emerald-400 animate-pulse">{feedback}</span>
-      )}
     </div>
   );
 }

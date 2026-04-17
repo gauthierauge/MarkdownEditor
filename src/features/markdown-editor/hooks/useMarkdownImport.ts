@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useAppDispatch } from '@/shared/store/hooks';
 import { saveFileContent, openFile } from '@/shared/store/slices/markdownSlice';
 import { importFileNode } from '@/shared/store/slices/foldersSlice';
@@ -8,7 +8,6 @@ import { readFileAsText } from '@/features/markdown-editor/services/markdown.ser
 
 export function useMarkdownImport() {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleImportClick = useCallback(() => {
@@ -21,14 +20,18 @@ export function useMarkdownImport() {
             if (!file) return;
             const id = nanoid();
             const name = file.name;
-            const text = await readFileAsText(file);
-            dispatch(importFileNode({ parentId: null, name, id }));
-            dispatch(saveFileContent({ id, content: text }));
-            dispatch(openFile({ id, name }));
-            navigate(`/markdown/${id}`);
+            try {
+                const text = await readFileAsText(file);
+                dispatch(importFileNode({ parentId: null, name, id }));
+                dispatch(saveFileContent({ id, content: text }));
+                dispatch(openFile({ id, name }));
+                toast.success(`"${name}" importé.`);
+            } catch {
+                toast.error('Impossible de lire le fichier.');
+            }
             e.target.value = '';
         },
-        [dispatch, navigate]
+        [dispatch]
     );
 
     return { handleImportClick, handleFileChange, inputRef };

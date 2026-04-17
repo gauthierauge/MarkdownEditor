@@ -1,4 +1,5 @@
 import React, { type KeyboardEvent, useState } from 'react';
+import { toast } from 'sonner';
 import type { FileTreeItemProps } from '@/features/file-tree/types/FileTree.types';
 import { Input } from '@/shared/components/ui/input';
 import { useDragContext } from '@/shared/context/drag/useDragContext';
@@ -236,7 +237,7 @@ export function FileTreeItem({
             <AlertDialogCancel>Annuler</AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => crud.onDelete(node.id)}
+              onClick={() => { crud.onDelete(node.id); toast.success(`"${node.name}" supprimé.`); }}
             >
               Supprimer
             </AlertDialogAction>

@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { toast } from 'sonner';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/slices/markdownSlice';
 import { downloadFile } from '@/shared/lib/downloadFile';
@@ -13,6 +14,7 @@ export function useMarkdownExport() {
 
     const handleExport = useCallback(() => {
         downloadFile(ensureMdExtension(fileName), content, 'text/markdown');
+        toast.success('Fichier exporté.');
     }, [content, fileName]);
 
     return { handleExport };

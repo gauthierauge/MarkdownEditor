@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
 import {
   removeImage,
@@ -12,10 +13,10 @@ import {
   upsertImages,
 } from '@/shared/store/slices/imagesSlice';
 import {
-  insertIntoOpenFile,
   selectOpenFileId,
   selectOpenFileName,
 } from '@/shared/store/slices/markdownSlice';
+import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
 import type { StoredImage } from '../types/image.types';
 import {
   buildImageMarkdown,
@@ -31,11 +32,6 @@ import {
   saveImagesToDb,
 } from '../services/imageStorage.service';
 
-type Feedback = {
-  tone: 'success' | 'error';
-  message: string;
-} | null;
-
 async function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -47,6 +43,7 @@ async function readFileAsText(file: File): Promise<string> {
 
 export function useImageLibrary() {
   const dispatch = useAppDispatch();
+  const { insertText } = useEditorInsert();
   const images = useAppSelector(selectImages);
   const imagesStatus = useAppSelector(selectImagesStatus);
   const imagesError = useAppSelector(selectImagesError);
@@ -56,7 +53,6 @@ export function useImageLibrary() {
   const [query, setQuery] = useState('');
   const [previewedImage, setPreviewedImage] = useState<StoredImage | null>(null);
   const [renamedImage, setRenamedImage] = useState<StoredImage | null>(null);
-  const [feedback, setFeedback] = useState<Feedback>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -101,14 +97,11 @@ export function useImageLibrary() {
     return images.filter((image) => image.name.toLowerCase().includes(needle));
   }, [images, query]);
 
-  const clearFeedback = () => setFeedback(null);
-
   const handleFilesSelected = async (files: File[]) => {
     if (files.length === 0) {
       return;
     }
 
-    clearFeedback();
     dispatch(setImagesError(null));
 
     try {
@@ -116,33 +109,25 @@ export function useImageLibrary() {
       await saveImagesToDb(nextImages);
       dispatch(upsertImages(nextImages));
       dispatch(setImagesStatus('ready'));
-      setFeedback({
-        tone: 'success',
-        message: `${nextImages.length} image(s) ajoutée(s) à la bibliothèque.`,
-      });
+      toast.success(`${nextImages.length} image(s) ajoutée(s) à la bibliothèque.`);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'L’ajout des images a échoué.';
+        error instanceof Error ? error.message : "L'ajout des images a échoué.";
       dispatch(setImagesError(message));
-      setFeedback({ tone: 'error', message });
+      toast.error(message);
     }
   };
 
   const handleDelete = async (image: StoredImage) => {
-    clearFeedback();
-
     try {
       await deleteImageFromDb(image.id);
       dispatch(removeImage(image.id));
-      setFeedback({
-        tone: 'success',
-        message: `L’image "${image.name}" a été supprimée.`,
-      });
+      toast.success(`L'image "${image.name}" a été supprimée.`);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'La suppression a échoué.';
       dispatch(setImagesError(message));
-      setFeedback({ tone: 'error', message });
+      toast.error(message);
     }
   };
 
@@ -174,40 +159,33 @@ export function useImageLibrary() {
         }),
       );
       setRenamedImage(null);
-      setFeedback({
-        tone: 'success',
-        message: `L’image a été renommée en "${updatedImage.name}".`,
-      });
+      toast.success(`L'image a été renommée en "${updatedImage.name}".`);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Le renommage a échoué.';
       dispatch(setImagesError(message));
-      setFeedback({ tone: 'error', message });
+      toast.error(message);
     }
   };
 
   const handleInsert = (image: StoredImage) => {
     if (!openFileId) {
-      setFeedback({
-        tone: 'error',
-        message: 'Ouvre un fichier Markdown avant d’insérer une image.',
-      });
+      toast.error("Ouvre un fichier Markdown avant d'insérer une image.");
       return;
     }
 
-    dispatch(insertIntoOpenFile(buildImageMarkdown(image)));
-    setFeedback({
-      tone: 'success',
-      message: `Image insérée dans "${openFileName ?? openFileId}".`,
-    });
+    insertText(buildImageMarkdown(image));
+    toast.success(`Image insérée dans "${openFileName ?? openFileId}".`);
   };
 
   const handleExportLibrary = () => {
     exportImageLibrary(images);
+    toast.success('Bibliothèque exportée.');
   };
 
   const handleExportSingle = (image: StoredImage) => {
     exportSingleImage(image);
+    toast.success(`"${image.name}" exportée.`);
   };
 
   const openImportDialog = () => {
@@ -228,15 +206,12 @@ export function useImageLibrary() {
       await saveImagesToDb(importedImages);
       dispatch(upsertImages(importedImages));
       dispatch(setImagesStatus('ready'));
-      setFeedback({
-        tone: 'success',
-        message: `${importedImages.length} image(s) importée(s).`,
-      });
+      toast.success(`${importedImages.length} image(s) importée(s).`);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'L’import des images a échoué.';
+        error instanceof Error ? error.message : "L'import des images a échoué.";
       dispatch(setImagesError(message));
-      setFeedback({ tone: 'error', message });
+      toast.error(message);
     }
   };
 
@@ -249,14 +224,12 @@ export function useImageLibrary() {
     openFileName,
     query,
     setQuery,
-    feedback,
     previewedImage,
     renamedImage,
     importInputRef,
     canInsert: Boolean(openFileId),
     setPreviewedImage,
     setRenamedImage,
-    clearFeedback,
     handleFilesSelected,
     handleDelete,
     handleRename,
