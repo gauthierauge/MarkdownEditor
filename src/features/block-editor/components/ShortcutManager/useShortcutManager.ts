@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { setShortcut, selectAllBlocks } from '@/shared/store/blocksSlice';
+import { setShortcut, selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 
 export function useShortcutManager() {
   const dispatch = useAppDispatch();

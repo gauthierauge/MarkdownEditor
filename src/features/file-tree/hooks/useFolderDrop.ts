@@ -1,8 +1,8 @@
 import { useDropzone } from 'react-dropzone';
-import { useDragContext } from './useDragContext';
+import { useDragContext } from '@/features/file-tree/context/useDragContext';
 import { useAppSelector } from '@/shared/store/hooks';
-import { selectFileTree } from '@/shared/store/foldersSlice';
-import { isAncestor } from '@/shared/store/folderTree.utils';
+import { selectFileTree } from '@/shared/store/slices/foldersSlice';
+import { isAncestor } from '@/shared/store/slices/folderTree.utils';
 
 interface UseFolderDropOptions {
     folderId: string;

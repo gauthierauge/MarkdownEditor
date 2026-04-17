@@ -1,13 +1,13 @@
-import { createContext, useContext, useRef, useCallback, type ReactNode } from 'react';
+import { createContext, useRef, useCallback, type ReactNode } from 'react';
 
 type InsertFn = (text: string) => void;
 
-interface EditorInsertContextValue {
+export interface EditorInsertContextValue {
   insertText: InsertFn;
   registerInsert: (fn: InsertFn | null) => void;
 }
 
-const EditorInsertContext = createContext<EditorInsertContextValue | null>(null);
+export const EditorInsertContext = createContext<EditorInsertContextValue | null>(null);
 
 export function EditorInsertProvider({ children }: { children: ReactNode }) {
   const fnRef = useRef<InsertFn | null>(null);
@@ -25,10 +25,4 @@ export function EditorInsertProvider({ children }: { children: ReactNode }) {
       {children}
     </EditorInsertContext.Provider>
   );
-}
-
-export function useEditorInsert() {
-  const ctx = useContext(EditorInsertContext);
-  if (!ctx) throw new Error('useEditorInsert must be used within EditorInsertProvider');
-  return ctx;
 }

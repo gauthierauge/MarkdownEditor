@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { addBlock, updateBlock, renameBlock, deleteBlock, selectBlockById } from '@/shared/store/blocksSlice';
+import { addBlock, updateBlock, renameBlock, deleteBlock, selectBlockById } from '@/shared/store/slices/blocksSlice';
 
 export function useBlockForm(blockId?: string, onSaved?: () => void) {
   const dispatch = useAppDispatch();

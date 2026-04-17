@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
-import { selectAllBlocks } from '@/shared/store/blocksSlice';
+import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 
 export function useBlockLibrary() {
   const blocks = useAppSelector(selectAllBlocks);

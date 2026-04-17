@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { FileNode } from '@/features/file-tree/types/FileTree.types';
+import type { RootState } from '../index';
 import {
     createFolderNode,
     createFileNode,
@@ -97,8 +98,5 @@ export const {
     importFileNode,
 } = foldersSlice.actions;
 export default foldersSlice.reducer;
-
-// Selectors
-import type { RootState } from './index';
 
 export const selectFileTree = (state: RootState) => state.folders.tree;

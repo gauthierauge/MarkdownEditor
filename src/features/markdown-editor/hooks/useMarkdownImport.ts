@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch } from '@/shared/store/hooks';
-import { saveFileContent, openFile } from '@/shared/store/markdownSlice';
-import { importFileNode } from '@/shared/store/foldersSlice';
+import { saveFileContent, openFile } from '@/shared/store/slices/markdownSlice';
+import { importFileNode } from '@/shared/store/slices/foldersSlice';
 import { readFileAsText } from '@/features/markdown-editor/services/markdown.service';
 
 export function useMarkdownImport() {

@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../index';
 
 interface MarkdownState {
     openFileId: string | null;
@@ -35,9 +36,6 @@ const markdownSlice = createSlice({
 
 export const { openFile, closeFile, saveFileContent } = markdownSlice.actions;
 export default markdownSlice.reducer;
-
-// Selectors
-import type { RootState } from './index';
 
 export const selectOpenFileId = (state: RootState) => state.markdown.openFileId;
 export const selectOpenFileName = (state: RootState) => state.markdown.openFileName;

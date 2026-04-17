@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
-import { openFile } from '@/shared/store/markdownSlice';
-import { selectFileTree } from '@/shared/store/foldersSlice';
+import { openFile } from '@/shared/store/slices/markdownSlice';
+import { selectFileTree } from '@/shared/store/slices/foldersSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImport';
 import { Button } from '@/shared/components/ui/button';

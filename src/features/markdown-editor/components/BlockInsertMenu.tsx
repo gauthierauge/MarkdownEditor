@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/shared/store/hooks';
-import { selectAllBlocks } from '@/shared/store/blocksSlice';
-import { useEditorInsert } from '@/shared/context/EditorInsertContext';
+import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
+import { useEditorInsert } from '@/shared/context/useEditorInsert';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import {

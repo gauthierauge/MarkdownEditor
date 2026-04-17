@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { importBlocks, selectAllBlocks } from '@/shared/store/blocksSlice';
+import { importBlocks, selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/services/fileFormat.service';
 import type { Block } from '@/features/block-editor/types/block.types';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
-import { selectOpenFileId } from '@/shared/store/markdownSlice';
+import { selectOpenFileId } from '@/shared/store/slices/markdownSlice';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
 import MarkdownEditor from '@/features/markdown-editor/MarkdownEditor';
 import AppSidebar from '@/shared/components/AppSidebar';

@@ -1,4 +1,4 @@
-import { useEditorInsert } from '@/shared/context/EditorInsertContext';
+import { useEditorInsert } from '@/shared/context/useEditorInsert';
 import type { Block } from '@/features/block-editor/types/block.types';
 import type React from 'react';
 

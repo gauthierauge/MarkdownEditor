@@ -5,7 +5,7 @@ import {
     deleteNode,
     renameNode,
     moveNode,
-} from '@/shared/store/foldersSlice'
+} from '@/shared/store/slices/foldersSlice'
 
 export function useNodeCrud() {
     const dispatch = useAppDispatch()

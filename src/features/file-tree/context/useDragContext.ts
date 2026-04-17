@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { DragContext } from '@/features/file-tree/context/DragContext';
+import { DragContext } from './DragContext';
 
 export function useDragContext() {
     const ctx = useContext(DragContext);

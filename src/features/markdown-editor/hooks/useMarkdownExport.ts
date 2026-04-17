@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
-import { selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/markdownSlice';
+import { selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/slices/markdownSlice';
 import { downloadFile } from '@/shared/lib/downloadFile';
 import { ensureMdExtension } from '@/features/markdown-editor/services/markdown.service';
 
