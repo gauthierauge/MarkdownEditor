@@ -12,7 +12,7 @@ export default function ImageLibrary() {
     filteredImages,
     images,
     imagesError,
-    imagesStatus,
+    isLoadingDelayed,
     openFileId,
     openFileName,
     query,
@@ -72,7 +72,7 @@ export default function ImageLibrary() {
       ) : null}
 
       <div className="text-[10px] text-muted-foreground">
-        {imagesStatus === 'loading' ? 'Chargement…' : `${filteredImages.length} / ${images.length} image(s)`}
+        {isLoadingDelayed ? 'Chargement…' : `${filteredImages.length} / ${images.length} image(s)`}
       </div>
 
       {filteredImages.length > 0 ? (
