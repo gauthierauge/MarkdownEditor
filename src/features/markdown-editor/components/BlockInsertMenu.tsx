@@ -1,50 +1,53 @@
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
-import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Plus } from 'lucide-react';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/shared/components/ui/popover';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select';
 
 export default function BlockInsertMenu() {
   const blocks = useAppSelector(selectAllBlocks);
   const { insertText } = useEditorInsert();
 
   return (
-    <Popover>
-      <PopoverTrigger
-        render={
-          <Button variant="outline" size="xs" title="Insérer un bloc">
-            <Plus className="w-3.5 h-3.5" /> Bloc
-          </Button>
-        }
-      />
-      <PopoverContent align="end" className="w-56 p-1">
+    <Select
+      value={null}
+      onValueChange={(id) => {
+        const block = blocks.find((b) => b.id === id);
+        if (block) insertText(block.content);
+      }}
+    >
+      <SelectTrigger size="sm" title="Insérer un bloc">
+        <SelectValue placeholder="Bloc">
+          <Plus className="w-3.5 h-3.5" /> Bloc
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent align="end" alignItemWithTrigger={false} sideOffset={6}>
         {blocks.length === 0 ? (
-          <p className="px-2 py-1.5 text-xs text-muted-foreground">
+          <SelectItem value="__empty__" disabled>
             Aucun bloc disponible
-          </p>
+          </SelectItem>
         ) : (
           blocks.map((block) => (
-            <button
-              key={block.id}
-              className="flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
-              onClick={() => insertText(block.content)}
-            >
-              <span className="truncate">{block.name}</span>
-              {block.shortcut && (
-                <Badge variant="secondary" className="ml-2 text-[10px] shrink-0">
-                  {block.shortcut}
-                </Badge>
-              )}
-            </button>
+            <SelectItem key={block.id} value={block.id}>
+              <span className="flex w-full items-center justify-between gap-2">
+                <span className="truncate">{block.name}</span>
+                {block.shortcut && (
+                  <Badge variant="secondary" className="text-[10px] shrink-0">
+                    {block.shortcut}
+                  </Badge>
+                )}
+              </span>
+            </SelectItem>
           ))
         )}
-      </PopoverContent>
-    </Popover>
+      </SelectContent>
+    </Select>
   );
 }

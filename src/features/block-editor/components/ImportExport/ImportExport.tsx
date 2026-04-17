@@ -39,7 +39,7 @@ export default function ImportExport() {
           <SelectTrigger size="sm" className="flex-1">
             <SelectValue placeholder="Choisir un bloc">{selectedBlock?.name}</SelectValue>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent alignItemWithTrigger={false}>
             {blocks.map((b) => (
               <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
             ))}
