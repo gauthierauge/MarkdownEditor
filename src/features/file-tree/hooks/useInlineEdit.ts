@@ -5,8 +5,8 @@ export function useInlineEdit(initialValue: string, onCommit: (value: string) =>
     const [value, setValue] = useState<string>(initialValue)
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const start = (e: React.MouseEvent) => {
-        e.stopPropagation()
+    const start = (e?: React.MouseEvent) => {
+        e?.stopPropagation()
         setValue(initialValue)
         setEditing(true)
         setTimeout(() => inputRef.current?.select(), 0)

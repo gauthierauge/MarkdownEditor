@@ -3,6 +3,7 @@ import { selectAllBlocks } from '@/shared/store/slices/blocksSlice';
 import { useEditorInsert } from '@/shared/context/editor-insert/useEditorInsert';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
+import { Plus } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -18,7 +19,7 @@ export default function BlockInsertMenu() {
       <PopoverTrigger
         render={
           <Button variant="outline" size="xs" title="Insérer un bloc">
-            + Bloc
+            <Plus className="w-3.5 h-3.5" /> Bloc
           </Button>
         }
       />

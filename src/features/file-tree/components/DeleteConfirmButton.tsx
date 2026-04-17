@@ -9,6 +9,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog'
+import { Trash2 } from 'lucide-react'
 
 interface DeleteConfirmButtonProps {
     label: string
@@ -24,7 +25,7 @@ export function DeleteConfirmButton({ label, onConfirm }: DeleteConfirmButtonPro
                 onClick={(e) => e.stopPropagation()}
                 tabIndex={-1}
             >
-                🗑️
+                <Trash2 className="w-3.5 h-3.5" />
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

@@ -2,6 +2,7 @@ import { useBlockListItem } from './useBlockListItem';
 import type { Block } from '@/features/block-editor/types/block.types';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
+import { Pencil } from 'lucide-react';
 
 type Props = { block: Block; onEdit: (blockId: string) => void };
 
@@ -25,7 +26,7 @@ export default function BlockListItem({ block, onEdit }: Props) {
         size="icon-xs"
         className="opacity-0 group-hover:opacity-100 transition-opacity"
       >
-        ✏️
+        <Pencil className="w-3.5 h-3.5" />
       </Button>
     </div>
   );

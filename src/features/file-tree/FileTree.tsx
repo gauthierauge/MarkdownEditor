@@ -6,13 +6,15 @@ import { useNodeCrud } from './hooks/useNodeCrud';
 import { useFolderDrop } from './hooks/useFolderDrop';
 import { DragProvider } from '@/shared/context/drag/DragProvider';
 import { Input } from '@/shared/components/ui/input';
-import { Button } from '@/shared/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
+import { MoreHorizontal } from 'lucide-react';
 
 function FileTreeInner({ data, onFileClick, onFolderClick }: FileTreeProps) {
   const { isExpanded, toggleExpand } = useFileTree();
   const crud = useNodeCrud();
   const [creatingRoot, setCreatingRoot] = useState<'folder' | 'file' | null>(null);
   const [rootName, setRootName] = useState<string>('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const { getRootProps: getRootDropProps } = useFolderDrop({
     folderId: null,
@@ -33,28 +35,35 @@ function FileTreeInner({ data, onFileClick, onFolderClick }: FileTreeProps) {
     if (e.key === 'Escape') setCreatingRoot(null);
   };
 
+  const handleMenuCreate = (type: 'folder' | 'file') => {
+    setMenuOpen(false);
+    setRootName('');
+    setCreatingRoot(type);
+  };
+
+  const menuItemClass =
+    'w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent transition-colors cursor-pointer';
+
   return (
     <div {...getRootDropProps()} className="w-full py-2 text-sm select-none text-left" role="tree">
       <div className="flex items-center justify-between px-2 pb-1">
         <span className="text-xs text-muted-foreground uppercase tracking-wide">Explorateur</span>
-        <span className="flex gap-1">
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={() => { setRootName(''); setCreatingRoot('folder'); }}
-            title="Nouveau dossier racine"
+        <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+          <PopoverTrigger
+            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent/80 transition-colors text-sm leading-none cursor-pointer"
+            aria-label="Actions"
           >
-            📁+
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={() => { setRootName(''); setCreatingRoot('file'); }}
-            title="Nouveau fichier racine"
-          >
-            📄+
-          </Button>
-        </span>
+            <MoreHorizontal className="w-4 h-4" />
+          </PopoverTrigger>
+          <PopoverContent className="w-44 p-1 flex flex-col gap-0" side="right" align="start">
+            <button className={menuItemClass} onClick={() => handleMenuCreate('folder')}>
+              Nouveau dossier
+            </button>
+            <button className={menuItemClass} onClick={() => handleMenuCreate('file')}>
+              Nouveau fichier
+            </button>
+          </PopoverContent>
+        </Popover>
       </div>
 
       {creatingRoot && (

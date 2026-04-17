@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { deserializeFile } from '@/features/block-editor/services/fileFormat.service';
 import type { Block } from '@/features/block-editor/types/block.types';
 import { Button } from '@/shared/components/ui/button';
+import { Download } from 'lucide-react';
 
 type Props = {
   onImport: (blocks: Block[]) => void;
@@ -37,7 +38,7 @@ export default function ImportButton({ onImport, onError }: Props) {
         variant="outline"
         size="xs"
       >
-        Importer
+        <Download className="w-3.5 h-3.5" /> Importer
       </Button>
       <input
         ref={inputRef}

@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import BlockListItem from './BlockListItem';
 import BlockFormDialog from '../BlockForm/BlockFormDialog';
 import { Button } from '@/shared/components/ui/button';
+import { Plus } from 'lucide-react';
 
 export default function BlockLibrary() {
   const { blocks, filtered, searchQuery, setSearchQuery } = useBlockLibrary();
@@ -27,7 +28,7 @@ export default function BlockLibrary() {
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </div>
         <Button variant="outline" size="xs" onClick={openCreate}>
-          + Nouveau
+          <Plus className="w-3.5 h-3.5" /> Nouveau
         </Button>
       </div>
       <div className="flex-1 overflow-y-auto">

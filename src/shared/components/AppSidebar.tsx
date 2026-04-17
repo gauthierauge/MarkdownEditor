@@ -12,6 +12,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
 } from '@/shared/components/ui/sidebar';
+import { Download } from 'lucide-react';
 
 export default function AppSidebar() {
   const dispatch = useAppDispatch();
@@ -36,7 +37,7 @@ export default function AppSidebar() {
               size="xs"
               title="Importer un fichier .md"
             >
-              ↑ Importer
+              <Download className="w-3.5 h-3.5" /> Importer
             </Button>
           </SidebarGroupLabel>
           <input

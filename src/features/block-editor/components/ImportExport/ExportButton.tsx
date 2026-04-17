@@ -1,5 +1,6 @@
 import { downloadFile } from '@/features/block-editor/services/fileFormat.service';
 import { Button } from '@/shared/components/ui/button';
+import { Upload } from 'lucide-react';
 
 type Props = {
   label: string;
@@ -20,7 +21,7 @@ export default function ExportButton({ label, getFilename, getContent, disabled 
       variant="outline"
       size="xs"
     >
-      {label}
+      <Upload className="w-3.5 h-3.5" /> {label}
     </Button>
   );
 }
