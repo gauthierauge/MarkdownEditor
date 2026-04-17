@@ -23,3 +23,8 @@ const uiSlice = createSlice({
 
 export const { startCapture, stopCapture } = uiSlice.actions;
 export default uiSlice.reducer;
+
+// Selectors
+import type { RootState } from './index';
+
+export const selectIsCapturingShortcut = (state: RootState) => state.ui.isCapturingShortcut;

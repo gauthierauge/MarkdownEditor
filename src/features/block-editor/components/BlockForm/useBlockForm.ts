@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { addBlock, updateBlock, renameBlock, deleteBlock } from '@/shared/store/blocksSlice';
+import { addBlock, updateBlock, renameBlock, deleteBlock, selectBlockById } from '@/shared/store/blocksSlice';
 
 export function useBlockForm(blockId?: string, onSaved?: () => void) {
   const dispatch = useAppDispatch();
-  const block = useAppSelector((s) =>
-    blockId ? s.blocks.blocks.find((b) => b.id === blockId) : undefined,
+  const block = useAppSelector((state) =>
+    blockId ? selectBlockById(state, blockId) : undefined,
   );
 
-  const [trackedBlockId, setTrackedBlockId] = useState<string | undefined>(blockId);
+  const [prevBlockId, setPrevBlockId] = useState<string | undefined>(blockId);
   const [name, setName] = useState<string>(block?.name ?? '');
   const [content, setContent] = useState<string>(block?.content ?? '');
 
-  if (trackedBlockId !== blockId) {
-    setTrackedBlockId(blockId);
+  if (prevBlockId !== blockId) {
+    setPrevBlockId(blockId);
     setName(block?.name ?? '');
     setContent(block?.content ?? '');
   }

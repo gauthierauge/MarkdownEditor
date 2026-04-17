@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 export default function BlockLibrary() {
   const { blocks, filtered, searchQuery, setSearchQuery } = useBlockLibrary();
   const [dialogBlockId, setDialogBlockId] = useState<string | undefined>();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const openCreate = () => {
     setDialogBlockId(undefined);

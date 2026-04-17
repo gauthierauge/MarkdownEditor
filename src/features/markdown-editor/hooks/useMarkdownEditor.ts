@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { saveFileContent, closeFile } from '@/shared/store/markdownSlice';
+import { saveFileContent, closeFile, selectOpenFileId, selectOpenFileName, selectFileContent } from '@/shared/store/markdownSlice';
+import { selectAllBlocks } from '@/shared/store/blocksSlice';
 import { useEditorInsert } from '@/shared/context/EditorInsertContext';
 import type { Block } from '@/features/block-editor/types/block.types';
 
@@ -9,16 +10,16 @@ const AUTOSAVE_DELAY_MS = 600;
 export function useMarkdownEditor() {
     const dispatch = useAppDispatch();
     const { registerInsert, insertText } = useEditorInsert();
-    const openFileId = useAppSelector((s) => s.markdown.openFileId);
-    const openFileName = useAppSelector((s) => s.markdown.openFileName);
-    const savedContent = useAppSelector((s) =>
-        openFileId != null ? (s.markdown.files[openFileId] ?? '') : ''
+    const openFileId = useAppSelector(selectOpenFileId);
+    const openFileName = useAppSelector(selectOpenFileName);
+    const savedContent = useAppSelector((state) =>
+        openFileId != null ? selectFileContent(state, openFileId) : ''
     );
-    const blocks = useAppSelector((s) => s.blocks.blocks);
+    const blocks = useAppSelector(selectAllBlocks);
 
-    const [draft, setDraft] = useState({ fileId: openFileId, content: savedContent });
-    const [showPreview, setShowPreview] = useState(true);
-    const [showBlockMenu, setShowBlockMenu] = useState(false);
+    const [draft, setDraft] = useState<{ fileId: string | null; content: string }>({ fileId: openFileId, content: savedContent });
+    const [showPreview, setShowPreview] = useState<boolean>(true);
+    const [showBlockMenu, setShowBlockMenu] = useState<boolean>(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);

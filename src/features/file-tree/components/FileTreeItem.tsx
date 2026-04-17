@@ -23,7 +23,7 @@ export function FileTreeItem({
   const expanded = isExpanded(node.id);
 
   const [creatingType, setCreatingType] = useState<CreatingType>(null);
-  const [newChildName, setNewChildName] = useState('');
+  const [newChildName, setNewChildName] = useState<string>('');
 
   const { setDragged, clearDragged } = useDragContext();
   const { getRootProps, isDragActive } = useFolderDrop({ folderId: node.id, onMove: crud.onMove });

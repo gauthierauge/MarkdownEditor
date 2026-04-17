@@ -35,3 +35,10 @@ const markdownSlice = createSlice({
 
 export const { openFile, closeFile, saveFileContent } = markdownSlice.actions;
 export default markdownSlice.reducer;
+
+// Selectors
+import type { RootState } from './index';
+
+export const selectOpenFileId = (state: RootState) => state.markdown.openFileId;
+export const selectOpenFileName = (state: RootState) => state.markdown.openFileName;
+export const selectFileContent = (state: RootState, id: string) => state.markdown.files[id] ?? '';

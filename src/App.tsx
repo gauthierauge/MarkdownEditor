@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/shared/store/hooks';
+import { selectOpenFileId } from '@/shared/store/markdownSlice';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
 import ImportExport from '@/features/block-editor/components/ImportExport/ImportExport';
 import ShortcutManager from '@/features/block-editor/components/ShortcutManager/ShortcutManager';
@@ -7,7 +8,7 @@ import AppSidebar from '@/shared/components/AppSidebar';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
 
 export default function App() {
-  const openFileId = useAppSelector((s) => s.markdown.openFileId);
+  const openFileId = useAppSelector(selectOpenFileId);
   useShortcutListener();
 
   return (

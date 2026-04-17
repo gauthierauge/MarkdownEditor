@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
+import { selectAllBlocks } from '@/shared/store/blocksSlice';
+import { selectIsCapturingShortcut } from '@/shared/store/uiSlice';
 import { useEditorInsert } from '@/shared/context/EditorInsertContext';
 import { matchShortcut } from '@/features/block-editor/services/shortcuts.service';
 
 export function useShortcutListener(): void {
   const { insertText } = useEditorInsert();
-  const blocks = useAppSelector((s) => s.blocks.blocks);
-  const isCapturing = useAppSelector((s) => s.ui.isCapturingShortcut);
+  const blocks = useAppSelector(selectAllBlocks);
+  const isCapturing = useAppSelector(selectIsCapturingShortcut);
 
   const isCapturingRef = useRef(isCapturing);
   useEffect(() => {

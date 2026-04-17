@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 
 export function useInlineEdit(initialValue: string, onCommit: (value: string) => void) {
-    const [editing, setEditing] = useState(false)
-    const [value, setValue] = useState(initialValue)
+    const [editing, setEditing] = useState<boolean>(false)
+    const [value, setValue] = useState<string>(initialValue)
     const inputRef = useRef<HTMLInputElement>(null)
 
     const start = (e: React.MouseEvent) => {

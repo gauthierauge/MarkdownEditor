@@ -1,8 +1,9 @@
 import { useAppSelector, useAppDispatch } from '@/shared/store/hooks';
-import { openFile } from '@/shared/store/markdownSlice';
+import { openFile, selectOpenFileId } from '@/shared/store/markdownSlice';
+import { selectFileTree } from '@/shared/store/foldersSlice';
 import { FileTree } from '@/features/file-tree/FileTree';
 import BlockLibrary from '@/features/block-editor/components/BlockLibrary/BlockLibrary';
-import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImportExport';
+import { useMarkdownImport } from '@/features/markdown-editor/hooks/useMarkdownImport';
 import { Button } from '@/shared/components/ui/button';
 import {
   Sidebar,
@@ -16,7 +17,7 @@ import {
 
 export default function AppSidebar() {
   const dispatch = useAppDispatch();
-  const tree = useAppSelector((s) => s.folders.tree);
+  const tree = useAppSelector(selectFileTree);
   const { handleImportClick, handleFileChange, inputRef } = useMarkdownImport();
 
   return (

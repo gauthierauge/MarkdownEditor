@@ -1,12 +1,12 @@
 import { useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
-import { importBlocks } from '@/shared/store/blocksSlice';
+import { importBlocks, selectAllBlocks } from '@/shared/store/blocksSlice';
 import { serializeBlock, serializeBlocks, sanitizeFilename } from '@/features/block-editor/services/fileFormat.service';
 import type { Block } from '@/features/block-editor/types/block.types';
 
 export function useImportExport() {
   const dispatch = useAppDispatch();
-  const blocks = useAppSelector((s) => s.blocks.blocks);
+  const blocks = useAppSelector(selectAllBlocks);
   const [selectedExportId, setSelectedExportId] = useState<string>('');
   const [feedback, setFeedback] = useState<string | null>(null);
 

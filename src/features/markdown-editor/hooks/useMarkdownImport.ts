@@ -1,24 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
-import { useAppDispatch, useAppSelector } from '@/shared/store/hooks';
+import { useAppDispatch } from '@/shared/store/hooks';
 import { saveFileContent, openFile } from '@/shared/store/markdownSlice';
 import { importFileNode } from '@/shared/store/foldersSlice';
-import { downloadFile } from '@/shared/lib/downloadFile';
-
-export function useMarkdownExport() {
-    const openFileId = useAppSelector((s) => s.markdown.openFileId);
-    const fileName = useAppSelector((s) => s.markdown.openFileName ?? 'document.md');
-    const content = useAppSelector((s) =>
-        openFileId != null ? (s.markdown.files[openFileId] ?? '') : ''
-    );
-
-    const handleExport = useCallback(() => {
-        const name = fileName.endsWith('.md') ? fileName : `${fileName}.md`;
-        downloadFile(name, content, 'text/markdown');
-    }, [content, fileName]);
-
-    return { handleExport };
-}
 
 export function useMarkdownImport() {
     const dispatch = useAppDispatch();

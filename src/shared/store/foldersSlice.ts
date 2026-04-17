@@ -97,3 +97,8 @@ export const {
     importFileNode,
 } = foldersSlice.actions;
 export default foldersSlice.reducer;
+
+// Selectors
+import type { RootState } from './index';
+
+export const selectFileTree = (state: RootState) => state.folders.tree;

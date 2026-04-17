@@ -62,3 +62,10 @@ const blocksSlice = createSlice({
 export const { addBlock, updateBlock, deleteBlock, renameBlock, setShortcut, importBlocks } =
   blocksSlice.actions;
 export default blocksSlice.reducer;
+
+// Selectors
+import type { RootState } from './index';
+
+export const selectAllBlocks = (state: RootState) => state.blocks.blocks;
+export const selectBlockById = (state: RootState, id: string) =>
+  state.blocks.blocks.find((b) => b.id === id);
