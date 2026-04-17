@@ -159,6 +159,9 @@ export function useImageLibrary() {
         }),
       );
       setRenamedImage(null);
+      if (previewedImage?.id === updatedImage.id) {
+        setPreviewedImage(updatedImage);
+      }
       toast.success(`L'image a été renommée en "${updatedImage.name}".`);
     } catch (error) {
       const message =
