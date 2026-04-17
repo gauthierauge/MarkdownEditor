@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 type InsertFn = (text: string) => void;
 
-export interface EditorInsertContextValue {
+interface EditorInsertContextValue {
   insertText: InsertFn;
   registerInsert: (fn: InsertFn | null) => void;
 }

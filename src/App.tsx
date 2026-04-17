@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectOpenFileId } from '@/shared/store/slices/markdownSlice';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
@@ -6,13 +6,14 @@ import MarkdownEditor from '@/features/markdown-editor/MarkdownEditor';
 import AppSidebar from '@/shared/components/AppSidebar';
 import BlocksSidebar from '@/shared/components/BlocksSidebar';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
+import { useSidebar } from '@/shared/components/ui/sidebar-context';
 import { Button } from '@/shared/components/ui/button';
 import { PanelRightIcon } from 'lucide-react';
 
 export default function App() {
   const openFileId = useAppSelector(selectOpenFileId);
   useShortcutListener();
-  const [rightOpen, setRightOpen] = useState<boolean>(true);
+  const rightToggleRef = useRef<() => void>(() => {});
 
   return (
     <SidebarProvider>
@@ -24,7 +25,7 @@ export default function App() {
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => setRightOpen((o) => !o)}
+              onClick={() => rightToggleRef.current()}
             >
               <PanelRightIcon />
               <span className="sr-only">Toggle Blocs</span>
@@ -47,13 +48,18 @@ export default function App() {
           </div>
         )}
       </SidebarInset>
-      <SidebarProvider
-        open={rightOpen}
-        onOpenChange={setRightOpen}
-        className="w-auto! min-h-0!"
-      >
+      <SidebarProvider className="w-auto! min-h-0!">
+        <BlocksSidebarBridge toggleRef={rightToggleRef} />
         <BlocksSidebar />
       </SidebarProvider>
     </SidebarProvider>
   );
+}
+
+function BlocksSidebarBridge({ toggleRef }: { toggleRef: React.MutableRefObject<() => void> }) {
+  const { toggleSidebar } = useSidebar();
+  useEffect(() => {
+    toggleRef.current = toggleSidebar;
+  }, [toggleRef, toggleSidebar]);
+  return null;
 }
