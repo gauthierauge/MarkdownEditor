@@ -1,7 +1,7 @@
 import type { FileNode } from '@/features/file-tree/types/FileTree.types';
 import { nanoid } from '@reduxjs/toolkit';
 
-export function findNode(tree: FileNode[], id: string): FileNode | null {
+function findNode(tree: FileNode[], id: string): FileNode | null {
     for (const node of tree) {
         if (node.id === id) return node;
         if (node.children) {

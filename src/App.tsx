@@ -1,24 +1,19 @@
-import React, { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useShortcutListener } from '@/features/block-editor/hooks/useShortcutListener';
 import MarkdownEditor from '@/features/markdown-editor/MarkdownEditor';
 import AppSidebar from '@/shared/components/AppSidebar';
 import BlocksSidebar from '@/shared/components/BlocksSidebar';
 import { Button } from '@/shared/components/ui/button';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/shared/components/ui/sidebar';
+import { useSidebar } from '@/shared/components/ui/sidebar-context';
 import { useAppSelector } from '@/shared/store/hooks';
 import { selectOpenFileId } from '@/shared/store/slices/markdownSlice';
 import { Toaster } from '@/shared/components/ui/sonner';
 import { PanelRightIcon } from 'lucide-react';
 
-function BlocksSidebarBridge({ triggerRef }: { triggerRef: React.RefObject<HTMLButtonElement | null> }) {
-  return (
-    <SidebarTrigger ref={triggerRef} className="hidden" />
-  );
-}
-
 export default function App() {
   const openFileId = useAppSelector(selectOpenFileId);
-  const rightTriggerRef = useRef<HTMLButtonElement>(null);
+  const rightToggleRef = useRef<() => void>(() => {});
 
   useShortcutListener();
 
@@ -32,7 +27,7 @@ export default function App() {
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => rightTriggerRef.current?.click()}
+              onClick={() => rightToggleRef.current()}
             >
               <PanelRightIcon />
               <span className="sr-only">Toggle Blocs</span>
@@ -50,15 +45,19 @@ export default function App() {
           )}
         </div>
       </SidebarInset>
-
-      <SidebarProvider
-        open
-        className="w-auto! min-h-0!"
-      >
-        <BlocksSidebarBridge triggerRef={rightTriggerRef} />
+      <SidebarProvider className="w-auto! min-h-0!">
+        <BlocksSidebarBridge toggleRef={rightToggleRef} />
         <BlocksSidebar />
       </SidebarProvider>
       <Toaster />
     </SidebarProvider>
   );
+}
+
+function BlocksSidebarBridge({ toggleRef }: { toggleRef: React.MutableRefObject<() => void> }) {
+  const { toggleSidebar } = useSidebar();
+  useEffect(() => {
+    toggleRef.current = toggleSidebar;
+  }, [toggleRef, toggleSidebar]);
+  return null;
 }

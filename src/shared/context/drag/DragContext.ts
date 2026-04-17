@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-export interface DragContextValue {
+interface DragContextValue {
     getDraggedId: () => string | null;
     setDragged: (id: string) => void;
     clearDragged: () => void;

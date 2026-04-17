@@ -37,7 +37,7 @@ export default function ImportExport() {
           onValueChange={(v) => setSelectedExportId(v ?? '')}
         >
           <SelectTrigger size="sm" className="flex-1">
-            <SelectValue placeholder="Choisir un bloc" />
+            <SelectValue placeholder="Choisir un bloc">{selectedBlock?.name}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {blocks.map((b) => (

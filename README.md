@@ -1,16 +1,47 @@
-# React + Vite
+# MarkdownEditor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projet réalisé par Gauthier AUGE, Lorenzo PORRETTI, Jessica LEJEUNE.
 
-Currently, two official plugins are available:
+Éditeur Markdown avec une bibliothèque de blocs réutilisables et un explorateur de fichiers. L'idée c'est de pouvoir écrire du Markdown, gérer ses fichiers dans une arborescence, et avoir des "blocs" de contenu pré-écrits qu'on peut insérer en un clic.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- React 19 + TypeScript
+- Vite
+- Redux Toolkit + redux-persist (state persistée dans le localStorage)
+- Tailwind CSS + shadcn
+- Lucide React pour les icônes
+- Marked + DOMPurify pour le rendu Markdown
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Lancer le projet
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Ce qu'il faut savoir
+
+**Persistance** : la state Redux est persistée dans le localStorage via redux-persist.
+
+**Blocs** : les blocs sont des snippets Markdown nommés qu'on peut créer/éditer/supprimer depuis la sidebar de droite. On peut leur assigner un raccourci clavier et les insérer dans l'éditeur via le menu "+ Bloc".
+
+**Explorateur de fichiers** : l'arborescence est entièrement gérée côté state (pas de vrai système de fichiers). On peut créer, renommer, supprimer et déplacer des fichiers/dossiers par drag & drop.
+
+**Import/Export** : les blocs s'exportent au format .mdlc (JSON). Le markdown de l'éditeur s'exporte en .md.
+
+## Structure du projet
+
+```
+src/
+  features/
+    block-editor/     # bibliothèque de blocs (CRUD, import/export, raccourcis)
+    file-tree/        # explorateur de fichiers (arborescence, drag & drop)
+    image-library/    # bibliothèque d'images (CRUD, import/export)
+    markdown-editor/  # éditeur + aperçu Markdown
+  shared/
+    components/       # composants UI partagés
+    context/          # contextes React (drag, insert)
+    store/            # Redux store + slices
+```
+
